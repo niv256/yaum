@@ -1,22 +1,33 @@
-[BITS 16]
-[ORG 0x7c00]
+extern kmain
 
-mov si,msg
-call prints
-jmp $
+MBALIGN		equ  1 << 0           
+MEMINFO	 	equ  1 << 1           
+FLAGS    	equ  MBALIGN | MEMINFO
+MAGIC    	equ  0x1BADB002       
+CHECKSUM 	equ -(MAGIC + FLAGS)  
+STACKSIZE	equ 0x4000
 
-prints:
-	mov ah, 0x0e
-	printc:
-		lodsb
-		cmp al, 0
-		jz return
-		int 0x10
-		jmp printc
-	return:
-		ret
+section .multiboot
 
-msg db "Hello World!", 0
+align 4
+	dd MAGIC
+	dd FLAGS
+	dd CHECKSUM
 
-TIMES 510-($-$$) db 0
-dw 0xaa55
+section .bss
+align 16
+stack_bottom:
+	resb 16384
+stack_top:
+
+section .text
+global _start:function (_start.end - _start)
+_start:
+	mov esp, stack_top
+	call kmain
+
+	cli
+.hang:
+	hlt
+	jmp .hang
+.end:
