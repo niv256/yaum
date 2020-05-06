@@ -6,10 +6,16 @@ LD_FLAGS:=-T linker.ld -ffreestanding -O2 -nostdlib -lgcc
 ASM_FLAGS:=-felf32
 
 all: kernel.o boot.o
-	$(CC) $(LD_FLAGS) kernel.o boot.o gdt.o descriptors.o -o untitled_niv_os.bin
+	$(CC) $(LD_FLAGS) kernel.o boot.o gdt.o descriptors.o screen.o string.o -o untitled_niv_os.bin
 
-kernel.o: descriptors.o
+kernel.o: descriptors.o screen.o
 	$(CC) $(CC_FLAGS) kernel/kernel.c -o kernel.o
+
+screen.o: string.o
+	$(CC) $(CC_FLAGS) kernel/screen.c -o screen.o
+
+string.o:
+	$(CC) $(CC_FLAGS) include/string.c -o string.o
 
 boot.o: kernel.o
 	$(ASM) $(ASM_FLAGS) -o boot.o boot/boot.asm
