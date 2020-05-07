@@ -1,6 +1,8 @@
+#include <stddef.h>
 #include <stdint.h>
-#include "../include/string.h"
 #include "screen.h"
+#include "../include/string.h"
+#include "../include/stdlib.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
@@ -62,4 +64,11 @@ void terminal_write(const char* data, size_t size) {
 
 void terminal_writestring(const char* data) {
 	terminal_write(data, strlen(data));
+}
+
+void terminal_writeint(int number, int base) {
+	// 11: characters needed for max value of int
+	char string[11];
+	itoa(number, string, base);
+	terminal_writestring(string);
 }

@@ -17,9 +17,15 @@
 void kmain(void) {
 	/* initialize terminal interface */
 	terminal_initialize();
+	terminal_writestring("this is big siber os.\n");
  
 	/* initialize the gdt */
+	terminal_writestring("initializing gdt.\n");
 	gdt_init();
+	terminal_writestring("gdt initialized.");
 
-	terminal_writestring("better than windows already\nand this is in new line\nand another line!\nHACKER SIBER OS!!!");
+	/* initialize the idt */
+	terminal_writestring("initializing gdt.\n");
+	idt_init();
+	terminal_writestring("idt initialized.");
 }
