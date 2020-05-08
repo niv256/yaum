@@ -3,23 +3,31 @@
 #ifndef ISR_H
 #define ISR_H
 
-struct registers {
+/*struct registers {
 	// single push
-	uint16_t ds;
+	uint32_t ds;
 
 	// pusha
-	uint16_t edi;
-	uint16_t esi;
-	uint16_t ebp;
-	uint16_t esp;
-	uint16_t ebx;
-	uint16_t edx;
-	uint16_t ecx;
-	uint16_t eax;
+	uint32_t edi;
+	uint32_t esi;
+	uint32_t ebp;
+	uint32_t esp;
+	uint32_t ebx;
+	uint32_t edx;
+	uint32_t ecx;
+	uint32_t eax;
 
 	// push in macro
-	uint16_t int_num;
-	uint16_t err_code;
-};
+	uint32_t int_num;
+	uint32_t err_code;
+};*/
+
+struct registers
+{
+	unsigned int ds;
+	unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;
+	unsigned int int_num, err_code;
+	unsigned int eip, cs, eflags, useresp, ss;
+} ;
 
 #endif

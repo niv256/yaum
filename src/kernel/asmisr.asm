@@ -299,4 +299,3 @@ isr_common_stub:
 	add esp, 8
 	sti
 	iret
-

@@ -68,7 +68,18 @@ void terminal_writestring(const char* data) {
 
 void terminal_writeint(int number, int base) {
 	// 11: characters needed for max value of int
-	char string[11];
+	char string[100];
 	itoa(number, string, base);
 	terminal_writestring(string);
+}
+
+void terminal_clearscreen(void) {
+	for (size_t y = 0; y < VGA_HEIGHT; y++) {
+		for (size_t x = 0; x < VGA_WIDTH; x++) {
+			const size_t index = y * VGA_WIDTH + x;
+			terminal_buffer[index] = vga_entry(' ', terminal_color);
+		}
+	}
+	terminal_row = 0;
+	terminal_column = 0;
 }
