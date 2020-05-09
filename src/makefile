@@ -1,14 +1,14 @@
 CC:=i686-elf-gcc
 LD:=i686-elf-ld
 ASM:=nasm
-CC_FLAGS:=-Wall -ffreestanding -O2 -Wextra -std=gnu99 -c
-LD_FLAGS:=-T linker.ld -ffreestanding -O2 -nostdlib -lgcc
-ASM_FLAGS:=-felf32
+CC_FLAGS:=-c -Wall -ffreestanding
+LD_FLAGS:=-T linker.ld
+ASM_FLAGS:=-f elf
 
-OBJECTS:=kernel.o boot.o gdt.o descriptors.o screen.o isr.o asmisr.o idt.o string.o stdlib.o
+OBJECTS:=kernel.o boot.o gdt.o descriptors.o screen.o isr.o asmisr.o idt.o string.o stdlib.o tools.o
 
 all: kernel.o boot.o isr.o
-	$(CC) $(LD_FLAGS) $(OBJECTS) -o untitled_niv_os.bin
+	$(LD) $(LD_FLAGS) $(OBJECTS) -o untitled_niv_os.bin
 
 kernel.o: descriptors.o screen.o
 	$(CC) $(CC_FLAGS) kernel/kernel.c -o kernel.o
@@ -25,7 +25,7 @@ stdlib.o:
 boot.o: kernel.o
 	$(ASM) $(ASM_FLAGS) -o boot.o boot/boot.asm
 
-descriptors.o: gdt.o idt.o asmisr.o
+descriptors.o: gdt.o idt.o asmisr.o tools.o
 	$(CC) $(CC_FLAGS) kernel/descriptors.c -o descriptors.o
 
 gdt.o:
@@ -37,8 +37,11 @@ idt.o:
 asmisr.o:
 	$(ASM) $(ASM_FLAGS) -o asmisr.o kernel/asmisr.asm
 
-isr.o: 
+isr.o: tools.o
 	$(CC) $(CC_FLAGS) kernel/isr.c -o isr.o
+
+tools.o:
+	$(CC) $(CC_FLAGS) kernel/tools.c -o tools.o
 
 clean:
 	$(shell rm -rf *.o untitled_niv_os.bin)

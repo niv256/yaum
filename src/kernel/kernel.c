@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include <stdint.h>
+#include "../include/stdint.h"
 #include "descriptors.h"
 #include "screen.h"
 
@@ -14,13 +14,9 @@
 #endif
 
 
-int kmain(void *mbd,unsigned int magic) {
+int kmain(void) {
 	/* initialize terminal interface */
 	terminal_initialize();
-	if (magic != 0x2BADB002){
-		terminal_writestring("Invalid multiboot header.");
-		return -1;
-	}
 	terminal_writestring("this is big siber os.\n");
 
 	/* initialize the gdt */
@@ -33,9 +29,7 @@ int kmain(void *mbd,unsigned int magic) {
 	idt_init();
 	terminal_writestring("idt initialized.\n");
 
-	__asm__("int $0x80");
-	/*terminal_writestring("interrupt 1\n");
-	terminal_clearscreen();
-	__asm__("int $0x80");*/
+	for(;;)
+		;
 	return 0;
 }
