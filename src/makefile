@@ -5,7 +5,7 @@ CC_FLAGS:=-c -Wall -ffreestanding
 LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
 
-OBJECTS:=kernel.o boot.o gdt.o descriptors.o screen.o isr.o asmisr.o idt.o string.o stdlib.o tools.o keyboard.o
+OBJECTS:=kernel.o boot.o gdt.o descriptors.o screen.o isr.o asmisr.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o
 
 all: kernel.o boot.o isr.o
 	$(LD) $(LD_FLAGS) $(OBJECTS) -o untitled_niv_os.bin
@@ -16,11 +16,14 @@ kernel.o: descriptors.o screen.o keyboard.o
 screen.o: string.o stdlib.o
 	$(CC) $(CC_FLAGS) kernel/screen.c -o screen.o
 
-string.o:
+string.o: ctype.o
 	$(CC) $(CC_FLAGS) include/string.c -o string.o
 
 stdlib.o:
 	$(CC) $(CC_FLAGS) include/stdlib.c -o stdlib.o
+
+ctype.o:
+	$(CC) $(CC_FLAGS) include/ctype.c -o ctype.o
 
 boot.o: kernel.o
 	$(ASM) $(ASM_FLAGS) -o boot.o boot/boot.asm
@@ -28,8 +31,11 @@ boot.o: kernel.o
 descriptors.o: gdt.o idt.o asmisr.o tools.o keyboard.o
 	$(CC) $(CC_FLAGS) kernel/descriptors.c -o descriptors.o
 
-keyboard.o: tools.o screen.o
+keyboard.o: tools.o screen.o shell.o
 	$(CC) $(CC_FLAGS) kernel/keyboard.c -o keyboard.o
+
+shell.o:
+	$(CC) $(CC_FLAGS) kernel/shell.c -o shell.o
 
 gdt.o:
 	$(ASM) $(ASM_FLAGS) -o gdt.o kernel/gdt.asm

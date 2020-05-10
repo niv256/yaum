@@ -645,7 +645,6 @@ static void irq_init(void){
 	outb(0xA1, 0x0);
 
 	setup_isr_callback(IRQ0, &watch);
-	setup_isr_callback(IRQ1, &get_key_press);
 }
 
 void watch(void) {

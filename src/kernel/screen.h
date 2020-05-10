@@ -1,6 +1,7 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include "../include/stdint.h"
 #include <stddef.h>
 
 void terminal_initialize(void);
@@ -10,6 +11,7 @@ void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
 void terminal_writeint(int number, int base);
 void terminal_clearscreen(void);
+char terminal_deletechar(void);
 
 /* Hardware text mode color constants. */
 enum vga_color {

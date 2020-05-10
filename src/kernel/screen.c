@@ -45,7 +45,6 @@ static void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
 }
 
 void terminal_putchar(char c) {
-
 	if (terminal_row >= VGA_HEIGHT) {
 		terminal_scroll_down();
 	}
@@ -88,21 +87,6 @@ void terminal_clearscreen(void) {
 }
 
 static void terminal_scroll_down(void) {
-	/*int i;
-	terminal_clearscreen();
-	terminal_writestring("abcd\n");
-	terminal_writestring("efgh\n");
-	// get first end of line (or the last character in the first row)
-	for (i = 0; i < VGA_WIDTH; i++) {
-			terminal_writeint(terminal_buffer[i] & 0xff, 16);
-			terminal_putchar(' ');
-			if (terminal_buffer[i] == vga_entry('\n', terminal_color)) {
-				break;
-			}
-	}
-	terminal_writeint(i, 10);
-	//memcpy(terminal_buffer, terminal_buffer + i, VGA_WIDTH*VGA_HEIGHT - i);
-	*/
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
 			terminal_buffer[y * VGA_WIDTH + x] = terminal_buffer[(y+1) * VGA_WIDTH + x];
@@ -113,4 +97,16 @@ static void terminal_scroll_down(void) {
 	}
 	terminal_row = VGA_HEIGHT - 1;
 	terminal_column = 0;
+}
+
+char terminal_deletechar(void) {
+	if (--terminal_column == -1) {
+		terminal_row--;
+		terminal_column = VGA_WIDTH - 1;
+	}
+	//terminal_buffer[terminal_row * VGA_HEIGHT + terminal_column] = vga_entry(' ', terminal_color);
+	//terminal_buffer[terminal_row * VGA_HEIGHT + terminal_column] = vga_entry('*', terminal_color);
+	terminal_putchar(' ');
+	terminal_column--;
+	return 1;
 }

@@ -2,17 +2,25 @@
 #include "../include/stdint.h"
 #include "tools.h"
 #include "screen.h"
+#include "isr.h"
+#include "shell.h"
 
-char key_map[256];
+#define MAX_KEY_VAL 0x58
+
+static char key_map[MAX_KEY_VAL];
+static char input_buffer[256];
+static int buffer_index;
 
 enum special_characters {BACKSPACE = 1, TAB, ENTER, LEFT_CTRL, LEFT_SHIFT, RIGHT_SHIFT, LEFT_ALT,
 			SPACE, CAPS_LOCK, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
 			NUM_LOCK, SCROLL_LOCK};
 
 void keyboard_init(void) {
-	for (int i = 0; i < 256; i++) {
-		key_map[i] = 0;
-	}
+	// init buffer
+	buffer_index = 0;
+	input_buffer[0] = '\0';
+
+	// init ascii map
 	key_map[0x02] = '1';
 	key_map[0x03] = '2';
 	key_map[0x04] = '3';
@@ -39,8 +47,7 @@ void keyboard_init(void) {
 	key_map[0x19] = 'p';
 	key_map[0x1a] = '[';
 	key_map[0x1b] = ']';
-	//key_map[0x1c] = ENTER;
-	key_map[0x1c] = '\n';
+	key_map[0x1c] = ENTER;
 	key_map[0x1d] = LEFT_CTRL;
 	key_map[0x1e] = 'a';
 	key_map[0x1f] = 's';
@@ -69,7 +76,6 @@ void keyboard_init(void) {
 	key_map[0x36] = RIGHT_SHIFT;
 	key_map[0x37] = '*';
 	key_map[0x38] = LEFT_ALT;
-	//key_map[0x39] = SPACE;
 	key_map[0x39] = ' ';
 	key_map[0x3a] = CAPS_LOCK;
 	key_map[0x3b] = F1;
@@ -99,12 +105,40 @@ void keyboard_init(void) {
 	key_map[0x53] = '.';
 	key_map[0x57] = F11;
 	key_map[0x58] = F12;
+
+	// setup the keyboard interuupt callback
+	setup_isr_callback(IRQ1, &get_key_press);
+}
+
+void reset_buffer(void) {
+	buffer_index = 0;
+	input_buffer[0] = '\0';
 }
 
 void get_key_press(void) {
-	uint8_t key_val;
-	key_val = key_map[inb(0x60)];
-	if((key_val && key_val > SCROLL_LOCK) || key_val == '\n'){
-		terminal_putchar(key_val);
+	uint8_t key_val, ascii_val;
+	key_val = inb(0x60);
+
+	if (key_val > MAX_KEY_VAL) {
+		return;
+	}
+
+	ascii_val = key_map[key_val];
+	switch (ascii_val) {
+		case ENTER:
+			user_input(input_buffer);
+			reset_buffer();
+			break;
+		case BACKSPACE:
+			if (terminal_deletechar()) {
+				input_buffer[--buffer_index] = '\0';
+			}
+			break;
+		default:
+			input_buffer[buffer_index++] = ascii_val;
+			input_buffer[buffer_index] = '\0';
+			terminal_putchar(ascii_val);
+			break;
+
 	}
 }

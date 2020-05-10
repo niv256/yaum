@@ -32,7 +32,7 @@ int kmain(void) {
 	keyboard_init();
 	terminal_writestring("keyboard initialized.\n");
 
-	terminal_writestring("Try typing! (backspace is scary though)\n");
+	terminal_writestring("> ");
 
 	for(;;)
 		;
