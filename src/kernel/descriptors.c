@@ -3,6 +3,7 @@
 #include "tools.h"
 #include "isr.h"
 #include "screen.h"
+#include "keyboard.h"
 
 #define NUMBER_IDT_ENTRIES 256
 #define NUMBER_GDT_ENTRIES 5
@@ -631,15 +632,6 @@ void idt_init (void) {
 	__asm__ ("sti");
 }
 
-void func1(void) {
-	uint8_t key_val;
-	terminal_writestring("you just pressed a key didnt you :)\n");
-	terminal_writestring("here is the value: ");
-	key_val = inb(0x60);
-	terminal_writeint(key_val, 16);
-	terminal_putchar('\n');
-}
-
 static void irq_init(void){
 	outb(0x20, 0x11);
 	outb(0xA0, 0x11);
@@ -653,7 +645,7 @@ static void irq_init(void){
 	outb(0xA1, 0x0);
 
 	setup_isr_callback(IRQ0, &watch);
-	setup_isr_callback(IRQ1, &func1);
+	setup_isr_callback(IRQ1, &get_key_press);
 }
 
 void watch(void) {

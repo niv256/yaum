@@ -2,6 +2,7 @@
 #include "../include/stdint.h"
 #include "descriptors.h"
 #include "screen.h"
+#include "keyboard.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -20,14 +21,18 @@ int kmain(void) {
 	terminal_writestring("this is big siber os.\n");
 
 	/* initialize the gdt */
-	terminal_writestring("initializing gdt.\n");
 	gdt_init();
 	terminal_writestring("gdt initialized.\n");
 
 	/* initialize the idt */
-	terminal_writestring("initializing idt.\n");
 	idt_init();
 	terminal_writestring("idt initialized.\n");
+
+	/* initialize the keyboard */
+	keyboard_init();
+	terminal_writestring("keyboard initialized.\n");
+
+	terminal_writestring("Try typing! (backspace is scary though)\n");
 
 	for(;;)
 		;
