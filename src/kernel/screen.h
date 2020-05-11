@@ -15,6 +15,7 @@ void terminal_writeint_nonlock(int number, int base);
 void terminal_clearscreen(void);
 char terminal_deletechar(void);
 void terminal_lock(void);
+void terminal_printstatus(void);
 
 /* Hardware text mode color constants. */
 enum vga_color {

@@ -91,6 +91,7 @@ void terminal_writeint_nonlock(int number, int base) {
 	itoa((unsigned)number, string, base);
 	terminal_writestring(string);
 }
+
 void terminal_clearscreen(void) {
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -113,6 +114,8 @@ static void terminal_scroll_down(void) {
 	}
 	terminal_row = VGA_HEIGHT - 1;
 	terminal_column = 0;
+	
+	terminal_row_lock--;
 }
 
 char terminal_deletechar(void) {
@@ -125,7 +128,11 @@ char terminal_deletechar(void) {
 		terminal_column = VGA_WIDTH - 1;
 	}
 	terminal_putchar(' ');
-	terminal_column--;
+
+	if (--terminal_column == -1) {
+		terminal_row--;
+		terminal_column = VGA_WIDTH - 1;
+	}
 	return 1;
 }
 
@@ -136,4 +143,15 @@ void terminal_lock(void) {
 
 static int can_delete(void) {
 	return (terminal_row_lock != terminal_row || terminal_column_lock != terminal_column);
+}
+
+void terminal_printstatus(void) {
+	size_t _terminal_row = terminal_row;
+	size_t _terminal_column = terminal_column;
+
+	terminal_putchar('\n');
+	terminal_writeint(_terminal_row, 10);
+	terminal_putchar(',');
+	terminal_writeint(_terminal_column, 10);
+	terminal_putchar('\n');
 }

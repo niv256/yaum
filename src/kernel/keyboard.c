@@ -157,7 +157,10 @@ void get_key_press(void) {
 		case F11:
 		case F12:
 		case NUM_LOCK:
+			break;
 		case SCROLL_LOCK:
+			// for debugging
+			terminal_printstatus();
 			break;
 		default:
 			input_buffer[buffer_index++] = ascii_val;
