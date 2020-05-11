@@ -130,9 +130,34 @@ void get_key_press(void) {
 			reset_buffer();
 			break;
 		case BACKSPACE:
+			if (buffer_index == 0) {
+				break;
+			}
+
 			if (terminal_deletechar()) {
 				input_buffer[--buffer_index] = '\0';
 			}
+			break;
+		case TAB:
+		case LEFT_CTRL:
+		case LEFT_SHIFT:
+		case RIGHT_SHIFT:
+		case LEFT_ALT:
+		case CAPS_LOCK:
+		case F1:
+		case F2:
+		case F3:
+		case F4:
+		case F5:
+		case F6:
+		case F7:
+		case F8:
+		case F9:
+		case F10:
+		case F11:
+		case F12:
+		case NUM_LOCK:
+		case SCROLL_LOCK:
 			break;
 		default:
 			input_buffer[buffer_index++] = ascii_val;

@@ -9,9 +9,12 @@ void terminal_setcolor(uint8_t color);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
+void terminal_writestring_nonlock(const char* data);
 void terminal_writeint(int number, int base);
+void terminal_writeint_nonlock(int number, int base);
 void terminal_clearscreen(void);
 char terminal_deletechar(void);
+void terminal_lock(void);
 
 /* Hardware text mode color constants. */
 enum vga_color {
