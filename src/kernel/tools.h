@@ -5,6 +5,7 @@
 
 void outb(uint16_t port, uint8_t val);
 uint8_t inb(uint16_t port);
+char switch_case(char c);
 
 /*
 uint8_t inw(uint16_t port);

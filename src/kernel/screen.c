@@ -10,6 +10,7 @@
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color);
+static void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y);
 static void terminal_scroll_down(void);
 static int can_delete(void);
 
@@ -43,12 +44,12 @@ void terminal_initialize(void) {
 
 }
 
-static void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
+static void terminal_putentryat(unsigned char c, uint8_t color, size_t x, size_t y) {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(char c) {
+void terminal_putchar(unsigned char c) {
 	if (terminal_row >= VGA_HEIGHT) {
 		terminal_scroll_down();
 	}
