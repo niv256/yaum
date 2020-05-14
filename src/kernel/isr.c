@@ -1,6 +1,7 @@
 #include "isr.h"
 #include "screen.h"
 #include "tools.h"
+#include "panic.h"
 
 #define NUMBER_CALLBACKS 16
 
@@ -30,5 +31,8 @@ void irq_handler(struct registers registers) {
 }
 
 void setup_isr_callback(int irq, void (*callback)()) {
+	if (!callback) {
+		panic("callback function passed is 0");
+	}
 	callbacks[irq-IRQ0] = callback;
 }
