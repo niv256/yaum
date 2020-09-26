@@ -1,9 +1,9 @@
 #include "keyboard.h"
 #include "../include/stdint.h"
-#include "tools.h"
-#include "screen.h"
 #include "isr.h"
+#include "screen.h"
 #include "shell.h"
+#include "tools.h"
 
 #define MAX_KEY_VAL 0xb6
 
@@ -12,9 +12,34 @@ static int buffer_index;
 static char caps_state;
 static char shift_state;
 
-enum special_characters {UNKNOWN = 0,BACKSPACE, TAB, ENTER, LEFT_CTRL, LEFT_SHIFT, RIGHT_SHIFT, LEFT_ALT,
-			SPACE, CAPS_LOCK, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
-			NUM_LOCK, SCROLL_LOCK, LEFT_SHIFT_RLS, RIGHT_SHIFT_RLS};
+enum special_characters {
+  UNKNOWN = 0,
+  BACKSPACE,
+  TAB,
+  ENTER,
+  LEFT_CTRL,
+  LEFT_SHIFT,
+  RIGHT_SHIFT,
+  LEFT_ALT,
+  SPACE,
+  CAPS_LOCK,
+  F1,
+  F2,
+  F3,
+  F4,
+  F5,
+  F6,
+  F7,
+  F8,
+  F9,
+  F10,
+  F11,
+  F12,
+  NUM_LOCK,
+  SCROLL_LOCK,
+  LEFT_SHIFT_RLS,
+  RIGHT_SHIFT_RLS
+};
 
 unsigned char get_ascii(unsigned char key) {
 	switch (key) {
@@ -109,94 +134,93 @@ unsigned char get_ascii(unsigned char key) {
 }
 
 void keyboard_init(void) {
-	// init buffer
-	buffer_index = 0;
-	input_buffer[0] = '\0';
+  // init buffer
+  buffer_index = 0;
+  input_buffer[0] = '\0';
 
-	// states
-	caps_state = 0;
-	shift_state = 0;
+  // states
+  caps_state = 0;
+  shift_state = 0;
 
-	// setup the keyboard interuupt callback
-	setup_isr_callback(IRQ1, &get_key_press);
+  // setup the keyboard interrupt callback
+  setup_isr_callback(IRQ1, &get_key_press);
 }
 
 void reset_buffer(void) {
-	buffer_index = 0;
-	input_buffer[0] = '\0';
+  buffer_index = 0;
+  input_buffer[0] = '\0';
 }
 
 void get_key_press(void) {
-	char key_val, ascii_val;
-	key_val = inb(0x60);
+  char key_val, ascii_val;
+  key_val = inb(0x60);
 
-	if (key_val > MAX_KEY_VAL) {
-		return;
-	}
+  if (key_val > MAX_KEY_VAL) {
+    return;
+  }
 
-	ascii_val = get_ascii(key_val);
-	switch (ascii_val) {
-		case ENTER:
-			user_input(input_buffer);
-			reset_buffer();
-			break;
-		case BACKSPACE:
-			if (buffer_index == 0) {
-				break;
-			}
+  ascii_val = get_ascii(key_val);
+  switch (ascii_val) {
+  case ENTER:
+    user_input(input_buffer);
+    reset_buffer();
+    break;
+  case BACKSPACE:
+    if (buffer_index == 0) {
+      break;
+    }
 
-			if (terminal_deletechar()) {
-				input_buffer[--buffer_index] = '\0';
-			}
-			break;
-		case TAB:
-		case LEFT_CTRL:
-		case LEFT_ALT:
-		case F1:
-		case F2:
-		case F3:
-		case F4:
-		case F5:
-		case F6:
-		case F7:
-		case F8:
-		case F9:
-		case F10:
-		case F11:
-		case F12:
-		case NUM_LOCK:
-			break;
-		case LEFT_SHIFT:
-		case RIGHT_SHIFT:
-			shift_state += 1;
-			break;
-		case LEFT_SHIFT_RLS:
-		case RIGHT_SHIFT_RLS:
-			shift_state -= 1;
-			break;
-		case CAPS_LOCK:
-			caps_state = (caps_state + 1) % 2;
-			break;
-		case SCROLL_LOCK:
-			// for debugging
-			terminal_printstatus();
-			break;
-		case UNKNOWN:
-			break;
-		default:
-			if (shift_state) {
-				ascii_val = switch_case(ascii_val);
-			}
+    if (terminal_deletechar()) {
+      input_buffer[--buffer_index] = '\0';
+    }
+    break;
+  case TAB:
+  case LEFT_CTRL:
+  case LEFT_ALT:
+  case F1:
+  case F2:
+  case F3:
+  case F4:
+  case F5:
+  case F6:
+  case F7:
+  case F8:
+  case F9:
+  case F10:
+  case F11:
+  case F12:
+  case NUM_LOCK:
+    break;
+  case LEFT_SHIFT:
+  case RIGHT_SHIFT:
+    shift_state += 1;
+    break;
+  case LEFT_SHIFT_RLS:
+  case RIGHT_SHIFT_RLS:
+    shift_state -= 1;
+    break;
+  case CAPS_LOCK:
+    caps_state = (caps_state + 1) % 2;
+    break;
+  case SCROLL_LOCK:
+    // for debugging
+    terminal_printstatus();
+    break;
+  case UNKNOWN:
+    break;
+  default:
+    if (shift_state) {
+      ascii_val = switch_case(ascii_val);
+    }
 
-			if (caps_state) {
-				ascii_val = switch_case(ascii_val);
-			}
+    if (caps_state) {
+      ascii_val = switch_case(ascii_val);
+    }
 
-			input_buffer[buffer_index++] = ascii_val;
-			input_buffer[buffer_index] = '\0';
+    input_buffer[buffer_index++] = ascii_val;
+    input_buffer[buffer_index] = '\0';
 
-			terminal_putchar(ascii_val);
-			break;
-
-	}
+    terminal_putchar(ascii_val);
+    break;
+  }
 }
