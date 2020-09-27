@@ -41,6 +41,7 @@ enum special_characters {
   RIGHT_SHIFT_RLS
 };
 
+// clang-format off
 unsigned char get_ascii(unsigned char key) {
 	switch (key) {
 		case 0x02: return shift_state == 0 ? '1' : '!'; break;
@@ -132,14 +133,15 @@ unsigned char get_ascii(unsigned char key) {
 		default:   return UNKNOWN;
 	}
 }
+// clang-format on
 
 void keyboard_init(void) {
   // init buffer
-  buffer_index = 0;
+  buffer_index    = 0;
   input_buffer[0] = '\0';
 
   // states
-  caps_state = 0;
+  caps_state  = 0;
   shift_state = 0;
 
   // setup the keyboard interrupt callback
@@ -147,7 +149,7 @@ void keyboard_init(void) {
 }
 
 void reset_buffer(void) {
-  buffer_index = 0;
+  buffer_index    = 0;
   input_buffer[0] = '\0';
 }
 
@@ -161,66 +163,58 @@ void get_key_press(void) {
 
   ascii_val = get_ascii(key_val);
   switch (ascii_val) {
-  case ENTER:
-    user_input(input_buffer);
-    reset_buffer();
-    break;
-  case BACKSPACE:
-    if (buffer_index == 0) {
+    case ENTER:
+      user_input(input_buffer);
+      reset_buffer();
       break;
-    }
+    case BACKSPACE:
+      if (buffer_index == 0) {
+        break;
+      }
 
-    if (terminal_deletechar()) {
-      input_buffer[--buffer_index] = '\0';
-    }
-    break;
-  case TAB:
-  case LEFT_CTRL:
-  case LEFT_ALT:
-  case F1:
-  case F2:
-  case F3:
-  case F4:
-  case F5:
-  case F6:
-  case F7:
-  case F8:
-  case F9:
-  case F10:
-  case F11:
-  case F12:
-  case NUM_LOCK:
-    break;
-  case LEFT_SHIFT:
-  case RIGHT_SHIFT:
-    shift_state += 1;
-    break;
-  case LEFT_SHIFT_RLS:
-  case RIGHT_SHIFT_RLS:
-    shift_state -= 1;
-    break;
-  case CAPS_LOCK:
-    caps_state = (caps_state + 1) % 2;
-    break;
-  case SCROLL_LOCK:
-    // for debugging
-    terminal_printstatus();
-    break;
-  case UNKNOWN:
-    break;
-  default:
-    if (shift_state) {
-      ascii_val = switch_case(ascii_val);
-    }
+      if (terminal_deletechar()) {
+        input_buffer[--buffer_index] = '\0';
+      }
+      break;
+    case TAB:
+    case LEFT_CTRL:
+    case LEFT_ALT:
+    case F1:
+    case F2:
+    case F3:
+    case F4:
+    case F5:
+    case F6:
+    case F7:
+    case F8:
+    case F9:
+    case F10:
+    case F11:
+    case F12:
+    case NUM_LOCK: break;
+    case LEFT_SHIFT:
+    case RIGHT_SHIFT: shift_state += 1; break;
+    case LEFT_SHIFT_RLS:
+    case RIGHT_SHIFT_RLS: shift_state -= 1; break;
+    case CAPS_LOCK: caps_state = (caps_state + 1) % 2; break;
+    case SCROLL_LOCK:
+      // for debugging
+      terminal_printstatus();
+      break;
+    case UNKNOWN: break;
+    default:
+      if (shift_state) {
+        ascii_val = switch_case(ascii_val);
+      }
 
-    if (caps_state) {
-      ascii_val = switch_case(ascii_val);
-    }
+      if (caps_state) {
+        ascii_val = switch_case(ascii_val);
+      }
 
-    input_buffer[buffer_index++] = ascii_val;
-    input_buffer[buffer_index] = '\0';
+      input_buffer[buffer_index++] = ascii_val;
+      input_buffer[buffer_index]   = '\0';
 
-    terminal_putchar(ascii_val);
-    break;
+      terminal_putchar(ascii_val);
+      break;
   }
 }

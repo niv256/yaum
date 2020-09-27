@@ -4,8 +4,8 @@
 #include "../include/string.h"
 #include <stddef.h>
 
-#define VGA_WIDTH 80
-#define VGA_HEIGHT 25
+#define VGA_WIDTH   80
+#define VGA_HEIGHT  25
 #define VGA_ADDRESS 0xB8000
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
@@ -31,14 +31,14 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color) {
 }
 
 void terminal_initialize(void) {
-  terminal_row = 0;
+  terminal_row    = 0;
   terminal_column = 0;
   terminal_lock();
-  terminal_color = vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK);
+  terminal_color  = vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK);
   terminal_buffer = (uint16_t *)VGA_ADDRESS;
   for (size_t y = 0; y < VGA_HEIGHT; y++) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {
-      const size_t index = y * VGA_WIDTH + x;
+      const size_t index     = y * VGA_WIDTH + x;
       terminal_buffer[index] = vga_entry(' ', terminal_color);
     }
   }
@@ -46,7 +46,7 @@ void terminal_initialize(void) {
 
 static void terminal_putentryat(unsigned char c, uint8_t color, size_t x,
                                 size_t y) {
-  const size_t index = y * VGA_WIDTH + x;
+  const size_t index     = y * VGA_WIDTH + x;
   terminal_buffer[index] = vga_entry(c, color);
 }
 
@@ -96,11 +96,11 @@ void terminal_writeint_nonlock(int number, int base) {
 void terminal_clearscreen(void) {
   for (size_t y = 0; y < VGA_HEIGHT; y++) {
     for (size_t x = 0; x < VGA_WIDTH; x++) {
-      const size_t index = y * VGA_WIDTH + x;
+      const size_t index     = y * VGA_WIDTH + x;
       terminal_buffer[index] = vga_entry(' ', terminal_color);
     }
   }
-  terminal_row = 0;
+  terminal_row    = 0;
   terminal_column = 0;
 }
 
@@ -115,7 +115,7 @@ static void terminal_scroll_down(void) {
     terminal_buffer[(VGA_HEIGHT - 1) * VGA_WIDTH + x] =
         vga_entry(' ', terminal_color);
   }
-  terminal_row = VGA_HEIGHT - 1;
+  terminal_row    = VGA_HEIGHT - 1;
   terminal_column = 0;
 
   terminal_row_lock--;
@@ -140,7 +140,7 @@ char terminal_deletechar(void) {
 }
 
 void terminal_lock(void) {
-  terminal_row_lock = terminal_row;
+  terminal_row_lock    = terminal_row;
   terminal_column_lock = terminal_column;
 }
 
@@ -150,7 +150,7 @@ static int can_delete(void) {
 }
 
 void terminal_printstatus(void) {
-  size_t _terminal_row = terminal_row;
+  size_t _terminal_row    = terminal_row;
   size_t _terminal_column = terminal_column;
 
   terminal_putchar('\n');

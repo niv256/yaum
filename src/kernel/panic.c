@@ -16,4 +16,5 @@ void panic(char *panic_msg) {
   }
 }
 
-static void print_info(void) {}
+static void print_info(void) {
+}

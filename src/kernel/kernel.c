@@ -5,7 +5,7 @@
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
-#error                                                                         \
+#error \
     "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
 

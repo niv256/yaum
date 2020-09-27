@@ -317,10 +317,10 @@ static gdt_entry create_gdt_entry(uint32_t base, uint32_t limit,
                                   uint8_t access_byte, uint8_t flags) {
   gdt_entry entry_to_fill;
 
-  entry_to_fill.limit_first_16 = limit & 0xFFFF;
-  entry_to_fill.base_first_16 = base & 0xFFFF;
-  entry_to_fill.base_middle_8 = (base >> 16) & 0xFF;
-  entry_to_fill.access_byte = access_byte;
+  entry_to_fill.limit_first_16     = limit & 0xFFFF;
+  entry_to_fill.base_first_16      = base & 0xFFFF;
+  entry_to_fill.base_middle_8      = (base >> 16) & 0xFF;
+  entry_to_fill.access_byte        = access_byte;
   entry_to_fill.limit_last_4_flags = (limit >> 16) & 0x0F;
   entry_to_fill.limit_last_4_flags |= flags & 0xF0;
   entry_to_fill.base_last_8 = (base >> 24) & 0xFF;
@@ -339,7 +339,7 @@ void gdt_init(void) {
 
 void enter_pmode(void) {
   gdt_ptr ptr_to_gdt;
-  ptr_to_gdt.size = sizeof(gdt_entry) * NUMBER_GDT_ENTRIES - 1;
+  ptr_to_gdt.size   = sizeof(gdt_entry) * NUMBER_GDT_ENTRIES - 1;
   ptr_to_gdt.offset = (uint32_t)&gdt_entries;
 
   _enter_pmode((uint32_t)&ptr_to_gdt);
@@ -350,10 +350,10 @@ static idt_entry create_idt_entry(uint32_t offset, uint16_t selector,
   idt_entry entry_to_fill;
 
   entry_to_fill.offset_first_16 = offset & 0xFFFF;
-  entry_to_fill.selector = selector;
-  entry_to_fill.reserved = 0;
-  entry_to_fill.flags = flags;
-  entry_to_fill.offset_last_16 = (offset >> 16) & 0xFFFF;
+  entry_to_fill.selector        = selector;
+  entry_to_fill.reserved        = 0;
+  entry_to_fill.flags           = flags;
+  entry_to_fill.offset_last_16  = (offset >> 16) & 0xFFFF;
 
   return entry_to_fill;
 }
@@ -361,13 +361,13 @@ static idt_entry create_idt_entry(uint32_t offset, uint16_t selector,
 static void set_idt_entry(int index, uint32_t offset, uint16_t selector,
                           uint8_t flags) {
   idt_entry temp_entry = create_idt_entry(offset, selector, flags);
-  idt_entries[index] = temp_entry;
+  idt_entries[index]   = temp_entry;
 }
 
 void idt_init(void) {
   idt_ptr ptr_to_idt;
   ptr_to_idt.limit = (uint16_t)sizeof(idt_entry) * NUMBER_IDT_ENTRIES - 1;
-  ptr_to_idt.base = (uint32_t)&idt_entries;
+  ptr_to_idt.base  = (uint32_t)&idt_entries;
 
   // set all idt gates
   // selector: kernel code in ring 0 (row 2) so 0x08
