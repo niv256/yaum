@@ -1,5 +1,4 @@
 #include "descriptors.h"
-#include "../include/stdint.h"
 #include "isr.h"
 #include "keyboard.h"
 #include "screen.h"

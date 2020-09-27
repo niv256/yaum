@@ -1,4 +1,3 @@
-#include "../include/stdint.h"
 #include "descriptors.h"
 #include "keyboard.h"
 #include "screen.h"
