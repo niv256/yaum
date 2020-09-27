@@ -23,6 +23,8 @@ int kmain(void) {
   gdt_init();
   terminal_writestring("gdt initialized.\n");
 
+  enter_pmode();
+
   /* initialize the idt */
   idt_init();
   terminal_writestring("idt initialized.\n");

@@ -265,8 +265,8 @@ extern void isr253();
 extern void isr254();
 extern void isr255();
 
-extern void gdt_write(uint32_t);
 extern void idt_write(uint32_t);
+extern void _enter_pmode(uint32_t);
 
 static void irq_init(void);
 void watch(void);
@@ -329,18 +329,20 @@ static gdt_entry create_gdt_entry(uint32_t base, uint32_t limit,
 }
 
 void gdt_init(void) {
-  gdt_ptr ptr_to_gdt;
-  ptr_to_gdt.size = sizeof(gdt_entry) * NUMBER_GDT_ENTRIES - 1;
-  ptr_to_gdt.offset = (uint32_t)&gdt_entries;
-
   // fill the entries
   gdt_entries[0] = create_gdt_entry(0, 0, 0, 0);                // null entry
   gdt_entries[1] = create_gdt_entry(0, 0xFFFFFFFF, 0x9A, 0xCF); // kernel code
   gdt_entries[2] = create_gdt_entry(0, 0xFFFFFFFF, 0x92, 0xCF); // kernel data
   gdt_entries[3] = create_gdt_entry(0, 0xFFFFFFFF, 0xFA, 0xCF); // user code
   gdt_entries[4] = create_gdt_entry(0, 0xFFFFFFFF, 0xF2, 0xCF); // user data
+}
 
-  gdt_write((uint32_t)&ptr_to_gdt);
+void enter_pmode(void) {
+  gdt_ptr ptr_to_gdt;
+  ptr_to_gdt.size = sizeof(gdt_entry) * NUMBER_GDT_ENTRIES - 1;
+  ptr_to_gdt.offset = (uint32_t)&gdt_entries;
+
+  _enter_pmode((uint32_t)&ptr_to_gdt);
 }
 
 static idt_entry create_idt_entry(uint32_t offset, uint16_t selector,

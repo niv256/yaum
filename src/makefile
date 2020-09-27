@@ -5,7 +5,7 @@ CC_FLAGS:=-c -Wall -ffreestanding
 LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
 
-OBJECTS:=kernel.o boot.o gdt.o descriptors.o screen.o isr.o asmisr.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o
+OBJECTS:=kernel.o boot.o descriptors.o screen.o isr.o asmisr.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o
 
 all: kernel.o boot.o isr.o
 	$(LD) $(LD_FLAGS) $(OBJECTS) -o untitled_niv_os.bin
@@ -28,7 +28,7 @@ ctype.o:
 boot.o: kernel.o
 	$(ASM) $(ASM_FLAGS) -o boot.o boot/boot.asm
 
-descriptors.o: gdt.o idt.o asmisr.o tools.o keyboard.o
+descriptors.o: pmode.o idt.o asmisr.o tools.o keyboard.o
 	$(CC) $(CC_FLAGS) kernel/descriptors.c -o descriptors.o
 
 keyboard.o: tools.o screen.o shell.o
@@ -40,8 +40,8 @@ shell.o: shutdown.o
 shutdown.o:
 	$(CC) $(CC_FLAGS) kernel/shutdown.c -o shutdown.o
 
-gdt.o:
-	$(ASM) $(ASM_FLAGS) -o gdt.o kernel/gdt.asm
+pmode.o:
+	$(ASM) $(ASM_FLAGS) -o pmode.o kernel/pmode.asm
 
 idt.o:
 	$(ASM) $(ASM_FLAGS) -o idt.o kernel/idt.asm
