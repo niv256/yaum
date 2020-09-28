@@ -1,5 +1,6 @@
 #include "descriptors.h"
 #include "keyboard.h"
+#include "paging.h"
 #include "screen.h"
 #include <stddef.h>
 
@@ -25,6 +26,9 @@ int kmain(void) {
 
   enter_pmode();
   terminal_writestring("entered protected mode.\n");
+
+  init_paging();
+  terminal_writestring("paging initialized.\n");
 
   /* initialize the idt */
   idt_init();
