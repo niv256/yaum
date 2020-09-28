@@ -1,14 +1,5 @@
-global _enter_pmode
-
-_enter_pmode:
-  cli
-  call enable_a20
-
-	mov eax, [esp+4]
-	lgdt [eax]
-
-  call set_pmode
-  ret               ; sti later after idt
+global enable_a20
+global set_pmode
 
 enable_a20:
   in al, 0x92

@@ -24,6 +24,7 @@ int kmain(void) {
   terminal_writestring("gdt initialized.\n");
 
   enter_pmode();
+  terminal_writestring("entered protected mode.\n");
 
   /* initialize the idt */
   idt_init();

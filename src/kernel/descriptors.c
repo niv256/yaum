@@ -265,8 +265,10 @@ extern void isr253();
 extern void isr254();
 extern void isr255();
 
+extern void gdt_write(uint32_t);
 extern void idt_write(uint32_t);
-extern void _enter_pmode(uint32_t);
+extern void enable_a20(void);
+extern void set_pmode(void);
 
 static void irq_init(void);
 void watch(void);
@@ -342,7 +344,9 @@ void enter_pmode(void) {
   ptr_to_gdt.size   = sizeof(gdt_entry) * NUMBER_GDT_ENTRIES - 1;
   ptr_to_gdt.offset = (uint32_t)&gdt_entries;
 
-  _enter_pmode((uint32_t)&ptr_to_gdt);
+  asm("cli"); // sti only after loading idt to avoid triple faut
+  gdt_write((uint32_t)&ptr_to_gdt);
+  set_pmode();
 }
 
 static idt_entry create_idt_entry(uint32_t offset, uint16_t selector,
