@@ -1,7 +1,7 @@
-#include "../include/stdint.h"
-
 #ifndef ISR_H
 #define ISR_H
+
+#include <stdint.h>
 
 #define IRQ0  32
 #define IRQ1  33
@@ -20,13 +20,15 @@
 #define IRQ14 46
 #define IRQ15 47
 
-void setup_isr_callback(int irq, void (*callback)());
-
-struct registers {
+typedef struct registers {
   uint32_t ds;
   uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
   uint32_t int_num, err_code;
   uint32_t eip, cs, eflags, useresp, ss;
-};
+} registers_t;
+
+typedef void (*isr_t)(registers_t);
+
+void setup_isr_callback(int irq, isr_t callback);
 
 #endif

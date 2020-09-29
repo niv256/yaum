@@ -4,11 +4,11 @@
 
 uint32_t time;
 
-static void watch(void) {
+static void watch(registers_t regs) {
 #if 0
   if (time % 1000 == 0) {
-    terminal_writestring("Tick: ");
-    terminal_writeint(time, 10);
+    terminal_writestring("system time (in seconds): ");
+    terminal_writeint(time / 1000, 10);
     terminal_putchar('\n');
   }
 #endif

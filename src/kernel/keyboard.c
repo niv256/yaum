@@ -1,6 +1,4 @@
 #include "keyboard.h"
-#include "../include/stdint.h"
-#include "isr.h"
 #include "screen.h"
 #include "shell.h"
 #include "tools.h"
@@ -153,7 +151,7 @@ void reset_buffer(void) {
   input_buffer[0] = '\0';
 }
 
-void get_key_press(void) {
+void get_key_press(registers_t regs) {
   char key_val, ascii_val;
   key_val = inb(0x60);
 
