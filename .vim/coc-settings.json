@@ -2,6 +2,8 @@
   "cSpell.words": [
     "pmode",
     "siber",
-    "kmain"
+    "kmain",
+    "kmalloc",
+    "kfree"
   ]
 }
