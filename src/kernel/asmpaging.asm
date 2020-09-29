@@ -7,7 +7,7 @@ set_paging:
 
   ; cr0 32th bit
   mov eax, cr0
-  or eax, 1<<32
+  or eax, 1<<31
   mov cr0, eax
 
   ret
