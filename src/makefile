@@ -61,7 +61,7 @@ tools.o:
 panic.o: screen.o
 	$(CC) $(CC_FLAGS) kernel/panic.c -o panic.o
 
-paging.o: asmpaging.o
+paging.o: asmpaging.o screen.o panic.o
 	$(CC) $(CC_FLAGS) kernel/paging.c -o paging.o
 
 asmpaging.o:

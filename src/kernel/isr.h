@@ -29,6 +29,6 @@ typedef struct registers {
 
 typedef void (*isr_t)(registers_t);
 
-void setup_isr_callback(int irq, isr_t callback);
+void setup_isr_callback(int isr, isr_t callback);
 
 #endif
