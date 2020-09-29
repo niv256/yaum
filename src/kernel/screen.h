@@ -6,15 +6,15 @@
 
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t color);
-void terminal_putchar(unsigned char c);
+void terminal_writechar(unsigned char c);
+void terminal_newline(void);
 void terminal_write(const char *data, size_t size);
 void terminal_writestring(const char *data);
-void terminal_writestring_nonlock(const char *data);
-void terminal_writeint(int number, int base);
-void terminal_writeint_nonlock(int number, int base);
+void terminal_writedec(int number);
+void terminal_writehex(int number);
+void terminal_writebin(uint8_t number);
 void terminal_clearscreen(void);
 char terminal_deletechar(void);
-void terminal_lock(void);
 void terminal_printstatus(void);
 
 /* Hardware text mode color constants. */

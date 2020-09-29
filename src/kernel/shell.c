@@ -7,7 +7,7 @@ void user_input(char *input) {
   char trimmed[256];
   trim(trimmed, 256, input);
 
-  terminal_putchar('\n');
+  terminal_newline();
   if (strcmp(trimmed, "java")) {
     terminal_writestring("haha c go brrrrrrrr\n");
   } else if (strcmp(trimmed, "shutdown")) {

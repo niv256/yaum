@@ -43,3 +43,16 @@ char switch_case(char c) {
 
   return c;
 }
+
+/* 8 bits + '\0' = 9 bytes at least*/
+char *binrep(char *dst, uint8_t num) {
+  char *end;
+  dst[8] = '\0';
+
+  end = dst + 7;
+  while (end > dst + 1) {
+    *end-- = num & 1 ? '1' : '0';
+    num >>= 1;
+  }
+  return dst;
+}

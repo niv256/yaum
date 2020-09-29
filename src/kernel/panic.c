@@ -6,7 +6,7 @@ static void print_info(void);
 void panic(char *panic_msg) {
   terminal_writestring("PANIC: ");
   terminal_writestring(panic_msg);
-  terminal_putchar('\n');
+  terminal_newline();
 
   print_info();
 

@@ -13,7 +13,7 @@ all: kernel.o boot.o isr.o
 kernel.o: descriptors.o screen.o keyboard.o paging.o timer.o
 	$(CC) $(CC_FLAGS) kernel/kernel.c -o kernel.o
 
-screen.o: string.o stdlib.o
+screen.o: string.o stdlib.o tools.o
 	$(CC) $(CC_FLAGS) kernel/screen.c -o screen.o
 
 string.o: ctype.o

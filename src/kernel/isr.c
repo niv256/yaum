@@ -16,8 +16,8 @@ void isr_handler(registers_t regs) {
     (*callbacks[regs.int_num])(regs);
   } else {
     terminal_writestring("got interrupt: 0x");
-    terminal_writeint((uint64_t)regs.int_num, 16);
-    terminal_putchar('\n');
+    terminal_writehex(regs.int_num);
+    terminal_newline();
   }
 }
 
@@ -37,8 +37,8 @@ void irq_handler(registers_t regs) {
     (*callbacks[regs.int_num])(regs);
   } else {
     terminal_writestring("got IRQ: 0x");
-    terminal_writeint(regs.int_num, 16);
-    terminal_putchar('\n');
+    terminal_writehex(regs.int_num);
+    terminal_newline();
   }
 }
 

@@ -2,6 +2,7 @@
 #include "../include/stdint.h"
 #include "../include/stdlib.h"
 #include "../include/string.h"
+#include "tools.h"
 #include <stddef.h>
 
 #define VGA_WIDTH   80
@@ -14,6 +15,8 @@ static void terminal_putentryat(unsigned char c, uint8_t color, size_t x,
                                 size_t y);
 static void terminal_scroll_down(void);
 static int can_delete(void);
+static void terminal_writeint(int number, int base);
+static void terminal_lock(void);
 
 static size_t terminal_row;
 static size_t terminal_column;
@@ -50,7 +53,7 @@ static void terminal_putentryat(unsigned char c, uint8_t color, size_t x,
   terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(unsigned char c) {
+void terminal_writechar(unsigned char c) {
   if (terminal_row >= VGA_HEIGHT) {
     terminal_scroll_down();
   }
@@ -66,9 +69,13 @@ void terminal_putchar(unsigned char c) {
   }
 }
 
+void terminal_newline(void) {
+  terminal_writechar('\n');
+}
+
 void terminal_write(const char *data, size_t size) {
   for (size_t i = 0; i < size; i++)
-    terminal_putchar(data[i]);
+    terminal_writechar(data[i]);
 }
 
 void terminal_writestring(const char *data) {
@@ -76,21 +83,29 @@ void terminal_writestring(const char *data) {
   terminal_lock();
 }
 
-void terminal_writestring_nonlock(const char *data) {
-  terminal_write(data, strlen(data));
-}
-
 void terminal_writeint(int number, int base) {
-  char string[100];
+  char string[11];
   itoa((unsigned)number, string, base);
   terminal_writestring(string);
   terminal_lock();
 }
 
-void terminal_writeint_nonlock(int number, int base) {
-  char string[100];
-  itoa((unsigned)number, string, base);
-  terminal_writestring(string);
+void terminal_writedec(int number) {
+  terminal_writeint(number, 10);
+}
+
+void terminal_writehex(int number) {
+  terminal_writechar('0');
+  terminal_writechar('x');
+  terminal_writeint(number, 16);
+}
+
+void terminal_writebin(uint8_t number) {
+  char bin[9];
+  binrep(bin, number);
+  terminal_writechar('0');
+  terminal_writechar('b');
+  terminal_writestring(bin);
 }
 
 void terminal_clearscreen(void) {
@@ -130,7 +145,7 @@ char terminal_deletechar(void) {
     terminal_row--;
     terminal_column = VGA_WIDTH - 1;
   }
-  terminal_putchar(' ');
+  terminal_writechar(' ');
 
   if (--terminal_column == -1) {
     terminal_row--;
@@ -139,7 +154,7 @@ char terminal_deletechar(void) {
   return 1;
 }
 
-void terminal_lock(void) {
+static void terminal_lock(void) {
   terminal_row_lock    = terminal_row;
   terminal_column_lock = terminal_column;
 }
@@ -153,9 +168,10 @@ void terminal_printstatus(void) {
   size_t _terminal_row    = terminal_row;
   size_t _terminal_column = terminal_column;
 
-  terminal_putchar('\n');
+  terminal_newline();
+  terminal_newline();
   terminal_writeint(_terminal_row, 10);
-  terminal_putchar(',');
+  terminal_writechar(',');
   terminal_writeint(_terminal_column, 10);
-  terminal_putchar('\n');
+  terminal_newline();
 }

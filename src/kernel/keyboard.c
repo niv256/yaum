@@ -212,7 +212,7 @@ void get_key_press(registers_t regs) {
       input_buffer[buffer_index++] = ascii_val;
       input_buffer[buffer_index]   = '\0';
 
-      terminal_putchar(ascii_val);
+      terminal_writechar(ascii_val);
       break;
   }
 }

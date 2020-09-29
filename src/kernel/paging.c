@@ -59,8 +59,8 @@ static void page_fault(registers_t regs) {
   if (err_code.reserved)
     terminal_writestring("reserved page, ");
   terminal_writestring(") at address 0x");
-  terminal_writeint(fault_addr, 16);
-  terminal_putchar('\n');
+  terminal_writehex(fault_addr);
+  terminal_newline();
 
   panic("page fault");
 }
