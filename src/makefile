@@ -5,12 +5,12 @@ CC_FLAGS:=-c -Wall -ffreestanding
 LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
 
-OBJECTS:=kernel.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o
+OBJECTS:=kernel.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o
 
 all: kernel.o boot.o isr.o
 	$(LD) $(LD_FLAGS) $(OBJECTS) -o untitled_niv_os.bin
 
-kernel.o: descriptors.o screen.o keyboard.o paging.o
+kernel.o: descriptors.o screen.o keyboard.o paging.o timer.o
 	$(CC) $(CC_FLAGS) kernel/kernel.c -o kernel.o
 
 screen.o: string.o stdlib.o
@@ -66,6 +66,9 @@ paging.o: asmpaging.o
 
 asmpaging.o:
 	$(ASM) $(ASM_FLAGS) -o asmpaging.o kernel/asmpaging.asm
+
+timer.o: isr.o screen.o
+	$(CC) $(CC_FLAGS) kernel/timer.c -o timer.o
 
 clean:
 	$(shell rm -rf *.o untitled_niv_os.bin)

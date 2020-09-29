@@ -2,6 +2,7 @@
 #include "keyboard.h"
 #include "paging.h"
 #include "screen.h"
+#include "timer.h"
 #include <stddef.h>
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
@@ -33,6 +34,9 @@ int kmain(void) {
   /* initialize the idt */
   idt_init();
   terminal_writestring("idt initialized.\n");
+
+  timer_init();
+  terminal_writestring("timer initialized.\n");
 
   /* initialize the keyboard */
   keyboard_init();

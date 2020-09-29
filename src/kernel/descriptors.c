@@ -653,16 +653,4 @@ static void irq_init(void) {
   outb(0xA1, 0x01);
   outb(0x21, 0x0);
   outb(0xA1, 0x0);
-
-  setup_isr_callback(IRQ0, &watch);
-}
-
-void watch(void) {
-  static uint32_t time = 0;
-  /*if (time % 1000 == 0) {
-          terminal_writestring("Tick: ");
-          terminal_writeint(time, 10);
-          terminal_putchar('\n');
-  }*/
-  time += 55;
 }
