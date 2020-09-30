@@ -95,7 +95,7 @@ static int first_inactive_alloc(void) {
   }
 
   if (allocs[i].active) {
-    panic("tried to add alloc when shouldn't have been possible");
+    PANIC("tried to add alloc when shouldn't have been possible");
   }
 
   return i;
@@ -110,7 +110,7 @@ static int find_alloc(int idx) {
   }
 
   if (allocs[i].idx != idx) {
-    panic("couldn't find alloc space when should have been able");
+    PANIC("couldn't find alloc space when should have been able");
   }
 
   return i;

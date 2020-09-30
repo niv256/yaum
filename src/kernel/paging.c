@@ -62,5 +62,5 @@ static void page_fault(registers_t regs) {
   terminal_writehex(fault_addr);
   terminal_newline();
 
-  panic("page fault");
+  PANIC("page fault");
 }

@@ -9,7 +9,7 @@ isr_t callbacks[NUMBER_CALLBACKS];
 
 void isr_handler(registers_t regs) {
   if (regs.int_num >= IRQ0 && regs.int_num <= IRQ15) {
-    panic("invalid interrupt number in isr");
+    PANIC("invalid interrupt number in isr");
   }
 
   if (callbacks[regs.int_num]) {
@@ -23,7 +23,7 @@ void isr_handler(registers_t regs) {
 
 void irq_handler(registers_t regs) {
   if (regs.int_num < IRQ0 || regs.int_num > IRQ15) {
-    panic("invalid interrupt number in irq");
+    PANIC("invalid interrupt number in irq");
   }
 
   // ack the irq
@@ -44,7 +44,7 @@ void irq_handler(registers_t regs) {
 
 void setup_isr_callback(int isr, isr_t callback) {
   if (!callback) {
-    panic("callback function passed is 0");
+    PANIC("callback function passed is 0");
   }
   callbacks[isr] = callback;
 }
