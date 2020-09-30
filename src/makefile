@@ -5,13 +5,13 @@ CC_FLAGS:=-c -Wall -ffreestanding
 LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
 
-OBJECTS:=kernel.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o math.o malloc.o
+OBJECTS:=kmain.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o math.o malloc.o
 
-all: kernel.o boot.o isr.o
+all: kmain.o boot.o isr.o
 	$(LD) $(LD_FLAGS) $(OBJECTS) -o yaum.bin
 
-kernel.o: descriptors.o screen.o keyboard.o paging.o timer.o malloc.o
-	$(CC) $(CC_FLAGS) kernel/kernel.c -o kernel.o
+kmain.o: descriptors.o screen.o keyboard.o paging.o timer.o malloc.o
+	$(CC) $(CC_FLAGS) kernel/kmain.c -o kmain.o
 
 screen.o: string.o stdlib.o tools.o
 	$(CC) $(CC_FLAGS) kernel/screen.c -o screen.o
@@ -28,7 +28,7 @@ ctype.o:
 math.o:
 	$(CC) $(CC_FLAGS) include/math.c -o math.o
 
-boot.o: kernel.o
+boot.o: kmain.o
 	$(ASM) $(ASM_FLAGS) -o boot.o boot/boot.asm
 
 descriptors.o: gdt.o pmode.o idt.o asmisr.o tools.o keyboard.o
