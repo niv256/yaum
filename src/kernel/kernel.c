@@ -19,7 +19,7 @@
 int kmain(void) {
   /* initialize terminal interface */
   terminal_initialize();
-  terminal_writestring("this is big siber os.\n");
+  terminal_writestring("yaum: big siber os.\n");
 
   /* initialize the gdt */
   gdt_init();

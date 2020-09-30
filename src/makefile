@@ -8,7 +8,7 @@ ASM_FLAGS:=-f elf
 OBJECTS:=kernel.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o math.o malloc.o
 
 all: kernel.o boot.o isr.o
-	$(LD) $(LD_FLAGS) $(OBJECTS) -o untitled_niv_os.bin
+	$(LD) $(LD_FLAGS) $(OBJECTS) -o yaum.bin
 
 kernel.o: descriptors.o screen.o keyboard.o paging.o timer.o malloc.o
 	$(CC) $(CC_FLAGS) kernel/kernel.c -o kernel.o
@@ -77,4 +77,4 @@ malloc.o: math.o panic.o
 	$(CC) $(CC_FLAGS) kernel/malloc.c -o malloc.o
 
 clean:
-	$(shell rm -rf *.o untitled_niv_os.bin)
+	$(shell rm -rf *.o yaum.bin)
