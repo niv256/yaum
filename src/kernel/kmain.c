@@ -1,5 +1,7 @@
+#include "args.h"
 #include "descriptors.h"
 #include "keyboard.h"
+#include "modules.h"
 #include "paging.h"
 #include "screen.h"
 #include "timer.h"
@@ -8,10 +10,12 @@
 #error "Either not using a cross-compiler or not an x86 elf compiler"
 #endif
 
+int kmain(multiboot_info_t *mbt, uint32_t magic) {
+  validate_args(mbt, magic);
 
-int kmain(void) {
   terminal_initialize();
-  terminal_writestring("yaum: big siber os.\n");
+  print_text_module(MDL_LOGO);
+  terminal_writestring("big siber os\n\n");
 
   gdt_init();
   terminal_writestring("gdt initialized.\n");
