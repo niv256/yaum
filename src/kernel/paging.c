@@ -58,7 +58,7 @@ static void page_fault(registers_t regs) {
     terminal_writestring("kernel mode only page, ");
   if (err_code.reserved)
     terminal_writestring("reserved page, ");
-  terminal_writestring(") at address 0x");
+  terminal_writestring(") at address ");
   terminal_writehex(fault_addr);
   terminal_newline();
 
