@@ -2,13 +2,12 @@
 #define SCREEN_H
 
 #include "../include/stdint.h"
-#include <stddef.h>
 
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t color);
 void terminal_writechar(unsigned char c);
 void terminal_newline(void);
-void terminal_write(const char *data, size_t size);
+void terminal_write(const char *data, uint32_t size);
 void terminal_writestring(const char *data);
 void terminal_writedec(int number);
 void terminal_writehex(int number);

@@ -2,8 +2,8 @@
 #include "ctype.h"
 #include "stdlib.h"
 
-size_t strlen(const char *str) {
-  size_t len = 0;
+uint32_t strlen(const char *str) {
+  uint32_t len = 0;
   while (str[len])
     len++;
   return len;
@@ -23,12 +23,12 @@ int strcmp(const char *str1, const char *str2) {
   return 1;
 }
 
-size_t trim(char *out, size_t len, const char *str) {
+uint32_t trim(char *out, uint32_t len, const char *str) {
   if (len == 0)
     return 0;
 
   const char *end;
-  size_t out_size;
+  uint32_t out_size;
 
   // Trim leading space
   while (isspace((unsigned char)*str))

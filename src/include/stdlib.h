@@ -1,9 +1,9 @@
 #ifndef STDLIB_H
 #define STDLIB_H
 
-#include <stddef.h>
+#include "stdint.h"
 
 char *itoa(int num, char *str, int base);
-void *memcpy(char *dest, const char *src, size_t size);
+void *memcpy(char *dest, const char *src, uint32_t size);
 
 #endif
