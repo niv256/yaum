@@ -15,7 +15,7 @@ void isr_handler(registers_t regs) {
   if (callbacks[regs.int_num]) {
     (*callbacks[regs.int_num])(regs);
   } else {
-    terminal_writestring("got interrupt: 0x");
+    terminal_writestring("got interrupt: ");
     terminal_writehex(regs.int_num);
     terminal_newline();
   }

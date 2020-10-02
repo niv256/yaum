@@ -7,6 +7,7 @@
     "kmalloc",
     "kfree",
     "bargs",
-    "utoa"
+    "utoa",
+    "haha"
   ]
 }
