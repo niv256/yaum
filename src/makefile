@@ -4,10 +4,13 @@ ASM:=nasm
 CC_FLAGS:=-c -Wall -ffreestanding
 LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
+ASM_MODS_FLAGS:=-f bin
 
 OBJECTS:=kmain.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o math.o malloc.o modules.o bargs.o
 
-all: kmain.o boot.o isr.o
+MODULES:=testprog
+
+all: $(OBJECTS) $(MODULES)
 	$(LD) $(LD_FLAGS) $(OBJECTS) -o yaum.bin
 
 kmain.o: descriptors.o screen.o keyboard.o paging.o timer.o malloc.o modules.o bargs.o
@@ -81,6 +84,11 @@ modules.o: screen.o panic.o
 
 bargs.o: modules.o panic.o
 	$(CC) $(CC_FLAGS) kernel/bargs.c -o bargs.o
+
+# modules
+
+testprog:
+	$(ASM) $(ASM_MODS_FLAGS) -o ../isodir/modules/testprog modules/testprog.asm
 
 clean:
 	$(shell rm -rf *.o yaum.bin)

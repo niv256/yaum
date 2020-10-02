@@ -1,9 +1,11 @@
 #include "shell.h"
 #include "../include/string.h"
+#include "modules.h"
 #include "screen.h"
 #include "shutdown.h"
 
 void user_input(char *input) {
+  int module_index;
   char trimmed[256];
   trim(trimmed, 256, input);
 
@@ -16,6 +18,11 @@ void user_input(char *input) {
     reboot();
   } else if (strcmp(trimmed, "")) {
     terminal_writestring("at least say SOMETHING...\n");
+  } else if ((module_index = get_module_index(trimmed)) != -1) {
+    uint32_t ret = execute_binary_modules(module_index);
+    terminal_writestring("return value: ");
+    terminal_writehex(ret);
+    terminal_newline();
   } else {
     terminal_writestring("stop saying nonsense, that's not even a command!\n");
   }

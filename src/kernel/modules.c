@@ -1,6 +1,13 @@
 #include "modules.h"
+#include "../include/string.h"
 #include "panic.h"
 #include "screen.h"
+
+#define MDL_PATH "/modules/"
+
+typedef uint32_t (*func)(void);
+
+static void validate_index(uint8_t index);
 
 uint32_t mods_count;
 multiboot_module_t *mods;
@@ -12,10 +19,24 @@ void init_modules(multiboot_info_t *mbt) {
   mods       = (multiboot_module_t *)mbt->mods_addr;
 }
 
-int print_text_module(uint8_t index) {
+static void validate_index(uint8_t index) {
   if (index >= mods_count) {
-    return INVARG;
+    PANIC("invalid module index");
   }
+}
+
+int get_module_index(const char *module_name) {
+  for (int i = 0; i < mods_count; i++) {
+    if (strcmp((char *)mods[i].cmdline + strlen(MDL_PATH), module_name)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int print_text_module(uint8_t index) {
+  validate_index(index);
+
   uint32_t mod_start = mods[index].mod_start;
   uint32_t mod_end   = mods[index].mod_end;
   terminal_write((char *)mod_start, mod_end - mod_start);
@@ -26,4 +47,11 @@ void write_logo(void) {
   if (print_text_module(MDL_LOGO)) {
     PANIC("yaum isodir/modules/logo.txt missing");
   }
+}
+
+int execute_binary_modules(uint8_t index) {
+  validate_index(index);
+
+  func mod_start = (func)mods[index].mod_start;
+  return mod_start();
 }
