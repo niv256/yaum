@@ -2,7 +2,6 @@
 #include "isr.h"
 #include "panic.h"
 #include "screen.h"
-#include <stdint.h>
 
 static void init_pd(void);
 static void init_pt(void);

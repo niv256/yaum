@@ -1,7 +1,6 @@
 #include "modules.h"
 #include "panic.h"
 #include "screen.h"
-#include <stdint.h>
 
 uint32_t mods_count;
 multiboot_module_t *mods;
