@@ -1,4 +1,4 @@
-#include "args.h"
+#include "bargs.h"
 #include "descriptors.h"
 #include "keyboard.h"
 #include "modules.h"
@@ -11,11 +11,10 @@
 #endif
 
 int kmain(multiboot_info_t *mbt, uint32_t magic) {
-  validate_args(mbt, magic);
+  init_bargs(mbt, magic);
 
   terminal_initialize();
-  print_text_module(MDL_LOGO);
-  terminal_writestring("big siber os\n\n");
+  write_logo();
 
   gdt_init();
   terminal_writestring("gdt initialized.\n");

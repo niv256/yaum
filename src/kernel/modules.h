@@ -6,9 +6,8 @@
 
 void init_modules(multiboot_info_t *mbt);
 int print_text_module(uint8_t index);
+void write_logo(void);
 
-#define MDL_LOGO 0
-
-#define INVARG 1
+enum err_codes { INVARG = 1 };
 
 #endif

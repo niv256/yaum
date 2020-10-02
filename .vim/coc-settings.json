@@ -5,6 +5,7 @@
     "siber",
     "kmain",
     "kmalloc",
-    "kfree"
+    "kfree",
+    "bargs"
   ]
 }
