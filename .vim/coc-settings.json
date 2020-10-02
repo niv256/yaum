@@ -6,6 +6,7 @@
     "kmain",
     "kmalloc",
     "kfree",
-    "bargs"
+    "bargs",
+    "utoa"
   ]
 }
