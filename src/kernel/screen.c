@@ -11,7 +11,7 @@ static void terminal_putentryat(unsigned char c, uint8_t color, uint32_t x,
                                 uint32_t y);
 static void terminal_scroll_down(void);
 static int can_delete(void);
-static void terminal_writeint(int number, int base);
+static void terminal_writeint(uint32_t number, int base);
 static void terminal_lock(void);
 
 static uint32_t terminal_row;
@@ -79,18 +79,22 @@ void terminal_writestring(const char *data) {
   terminal_lock();
 }
 
-void terminal_writeint(int number, int base) {
+void terminal_writeint(uint32_t number, int base) {
   char string[11];
-  itoa((unsigned)number, string, base);
+  if (base == 16) {
+    utoa(number, string, base);
+  } else {
+    itoa(number, string, base);
+  }
   terminal_writestring(string);
   terminal_lock();
 }
 
-void terminal_writedec(int number) {
+void terminal_writedec(uint32_t number) {
   terminal_writeint(number, 10);
 }
 
-void terminal_writehex(int number) {
+void terminal_writehex(uint32_t number) {
   terminal_writechar('0');
   terminal_writechar('x');
   terminal_writeint(number, 16);
