@@ -1,9 +1,7 @@
 #include "screen.h"
-#include "../include/stdint.h"
-#include "../include/stdlib.h"
-#include "../include/string.h"
 #include "tools.h"
-#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color);

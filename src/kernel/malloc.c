@@ -1,7 +1,7 @@
 #include "malloc.h"
-#include "../include/math.h"
 #include "panic.h"
 #include "screen.h"
+#include <math.h>
 #include <stddef.h>
 
 static char get_bit(char idx);

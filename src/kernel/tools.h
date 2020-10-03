@@ -1,7 +1,7 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#include "../include/stdint.h"
+#include <stdint.h>
 
 void outb(uint16_t port, uint8_t val);
 void outw(uint16_t port, uint16_t val);

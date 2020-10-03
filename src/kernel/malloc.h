@@ -1,7 +1,7 @@
 #ifndef MALLOC_H
 #define MALLOC_H
 
-#include "../include/stdint.h"
+#include <stdint.h>
 
 #define HEAP_SIZE   0x1000
 #define BUCKET_SIZE 64

@@ -1,7 +1,7 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 uint32_t strlen(const char *str);
 int strcmp(const char *str1, const char *str2);

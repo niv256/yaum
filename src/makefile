@@ -1,7 +1,7 @@
 CC:=i686-elf-gcc
 LD:=i686-elf-ld
 ASM:=nasm
-CC_FLAGS:=-c -Wall -ffreestanding
+CC_FLAGS:=-c -Wall -ffreestanding -Iinclude/
 LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
 ASM_MODS_FLAGS:=-f bin

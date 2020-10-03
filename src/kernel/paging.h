@@ -1,7 +1,7 @@
 #ifndef _PAGING_H
 #define _PAGING_H
 
-#include "../include/stdint.h"
+#include <stdint.h>
 
 typedef uint32_t pte_t;
 typedef uint32_t pde_t;
