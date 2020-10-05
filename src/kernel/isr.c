@@ -5,11 +5,18 @@
 
 #define NUMBER_CALLBACKS 256
 
+static char is_irq(uint32_t int_num);
+
 isr_t callbacks[NUMBER_CALLBACKS];
 
 void isr_handler(registers_t regs) {
-  if (regs.int_num >= IRQ0 && regs.int_num <= IRQ15) {
-    PANIC("invalid interrupt number in isr");
+  if (is_irq(regs.int_num)) {
+    // ack the irq
+    outb(0x20, 0x20);
+    // if the interrupt was from slave PIC
+    if (regs.int_num >= IRQ8) {
+      outb(0xa0, 0x20);
+    }
   }
 
   if (callbacks[regs.int_num]) {
@@ -21,25 +28,8 @@ void isr_handler(registers_t regs) {
   }
 }
 
-void irq_handler(registers_t regs) {
-  if (regs.int_num < IRQ0 || regs.int_num > IRQ15) {
-    PANIC("invalid interrupt number in irq");
-  }
-
-  // ack the irq
-  outb(0x20, 0x20);
-  // if the interrupt was from slave PIC
-  if (regs.int_num >= IRQ8) {
-    outb(0xa0, 0x20);
-  }
-
-  if (callbacks[regs.int_num]) {
-    (*callbacks[regs.int_num])(regs);
-  } else {
-    terminal_writestring("got IRQ: 0x");
-    terminal_writehex(regs.int_num);
-    terminal_newline();
-  }
+static char is_irq(uint32_t int_num) {
+  return (int_num >= IRQ0 && int_num <= IRQ15);
 }
 
 void setup_isr_callback(int isr, isr_t callback) {
