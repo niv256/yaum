@@ -28,7 +28,7 @@ int kmain(multiboot_info_t *mbt, uint32_t magic) {
   idt_init();
   terminal_writestring("idt initialized.\n");
 
-  timer_init();
+  timer_init(TIMER_SILENT, SECOND_TO_MS(2));
   terminal_writestring("timer initialized.\n");
 
   keyboard_init();
