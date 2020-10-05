@@ -5,6 +5,7 @@
 #include <string.h>
 
 #define MDL_PATH "/modules/"
+#define MDL_LOGO "logo.txt"
 
 typedef uint32_t (*func)(void);
 
@@ -12,8 +13,6 @@ static void validate_index(uint8_t index);
 
 uint32_t mods_count;
 multiboot_module_t *mods;
-
-enum modules { MDL_LOGO };
 
 void init_modules(multiboot_info_t *mbt) {
   mods_count = mbt->mods_count;
@@ -45,9 +44,11 @@ int print_text_module(uint8_t index) {
 }
 
 void write_logo(void) {
-  if (print_text_module(MDL_LOGO)) {
+  int module_index = get_module_index(MDL_LOGO);
+  if (module_index == -1) {
     PANIC("yaum isodir/modules/logo.txt missing");
   }
+  print_text_module(module_index);
 }
 
 int execute_binary_modules(uint8_t index) {
