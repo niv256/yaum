@@ -6,17 +6,17 @@ LD_FLAGS:=-T linker.ld
 ASM_FLAGS:=-f elf
 ASM_MODS_FLAGS:=-f bin
 
-OBJECTS:=kmain.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o math.o malloc.o modules.o bargs.o
+OBJECTS:=kmain.o boot.o descriptors.o screen.o isr.o asmisr.o gdt.o idt.o string.o stdlib.o tools.o keyboard.o shell.o ctype.o panic.o shutdown.o pmode.o paging.o asmpaging.o timer.o math.o malloc.o modules.o bargs.o uart.o
 
 MODULES:=testprog
 
 all: $(OBJECTS) $(MODULES)
 	$(LD) $(LD_FLAGS) $(OBJECTS) -o yaum.bin
 
-kmain.o: descriptors.o screen.o keyboard.o paging.o timer.o malloc.o modules.o bargs.o
+kmain.o: descriptors.o screen.o keyboard.o paging.o timer.o malloc.o modules.o bargs.o uart.o
 	$(CC) $(CC_FLAGS) kernel/kmain.c -o kmain.o
 
-screen.o: string.o stdlib.o tools.o
+screen.o: string.o stdlib.o tools.o uart.o
 	$(CC) $(CC_FLAGS) kernel/screen.c -o screen.o
 
 string.o: ctype.o
@@ -84,6 +84,9 @@ modules.o: screen.o panic.o
 
 bargs.o: modules.o panic.o
 	$(CC) $(CC_FLAGS) kernel/bargs.c -o bargs.o
+
+uart.o:
+	$(CC) $(CC_FLAGS) kernel/uart.c -o uart.o
 
 # modules
 

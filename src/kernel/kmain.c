@@ -5,12 +5,14 @@
 #include "paging.h"
 #include "screen.h"
 #include "timer.h"
+#include "uart.h"
 
 #if defined(__linux__) || !defined(__i686__)
 #error "Either not using a cross-compiler or not an x86 elf compiler"
 #endif
 
 int kmain(multiboot_info_t *mbt, uint32_t magic) {
+  init_uart();
   init_bargs(mbt, magic);
 
   terminal_initialize();

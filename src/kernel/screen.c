@@ -1,5 +1,6 @@
 #include "screen.h"
 #include "tools.h"
+#include "uart.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -48,15 +49,20 @@ static void terminal_putentryat(unsigned char c, uint8_t color, uint32_t x,
 }
 
 void terminal_writechar(unsigned char c) {
+  uart_writechar(c);
+
   if (terminal_row >= VGA_HEIGHT) {
     terminal_scroll_down();
   }
+
   if (c == '\n') {
     terminal_row++;
     terminal_column = 0;
     return;
   }
+
   terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+
   if (++terminal_column == VGA_WIDTH) {
     terminal_column = 0;
     terminal_row++;
@@ -143,12 +149,16 @@ char terminal_deletechar(void) {
     terminal_row--;
     terminal_column = VGA_WIDTH - 1;
   }
-  terminal_writechar(' ');
+
+  uart_deletechar();       // backspace on COM1
+  terminal_writechar(' '); // clear leftover on both terminal and COM1
+  uart_deletechar();       // delete the space from COM1
 
   if (--terminal_column == -1) {
     terminal_row--;
     terminal_column = VGA_WIDTH - 1;
   }
+
   return 1;
 }
 
