@@ -7,12 +7,21 @@ export LD_FLAGS:=-T linker.ld
 export ASM_FLAGS:=-f elf
 export ASM_MODS_FLAGS:=-f bin
 
-SUBDIRS:=kernel modules libc
 MAKE:=make
 
-.PHONY: subdirs $(SUBDIRS)
+SUBDIRS:=kernel modules libc
+CLEANDIRS:=$(SUBDIRS:%=clean-%)
+
+.PHONY: subdirs $(SUBDIRS) clean $(CLEANDIRS)
+
+all: subdirs
 
 subdirs: $(SUBDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
+
+clean: $(CLEANDIRS)
+
+$(CLEANDIRS):
+	$(MAKE) -C $(@:clean-%=%) clean
