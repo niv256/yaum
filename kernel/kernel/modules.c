@@ -4,8 +4,9 @@
 #include <kernel/stdlib.h>
 #include <kernel/string.h>
 
-#define MDL_PATH "/modules/"
-#define MDL_LOGO "logo.txt"
+#define MDL_PATH      "/modules/"
+#define MDL_EXEC_PATH "/modules/executables/"
+#define MDL_LOGO      "text/logo.txt"
 
 typedef uint32_t (*func)(void);
 
@@ -28,6 +29,15 @@ static void validate_index(uint8_t index) {
 int get_module_index(const char *module_name) {
   for (int i = 0; i < mods_count; i++) {
     if (strcmp((char *)mods[i].cmdline + strlen(MDL_PATH), module_name)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int get_exec_module_index(const char *module_name) {
+  for (int i = 0; i < mods_count; i++) {
+    if (strcmp((char *)mods[i].cmdline + strlen(MDL_EXEC_PATH), module_name)) {
       return i;
     }
   }

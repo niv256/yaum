@@ -1,6 +1,6 @@
 EXEC=
 TEXT=
 
-EXEC+=testprog
+TEXT+=text/logo.txt
 
-TEXT+=logo.txt
+EXEC+=executables/testprog
