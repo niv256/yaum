@@ -3,5 +3,3 @@ timeout 1
 
 title yaum
 kernel /kernel/yaum.bin
-module /modules/logo.txt
-module /modules/testprog
