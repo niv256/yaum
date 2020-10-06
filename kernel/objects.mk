@@ -22,8 +22,3 @@ OBJECTS+=kernel/malloc.o
 OBJECTS+=kernel/modules.o
 OBJECTS+=kernel/bargs.o
 OBJECTS+=kernel/uart.o
-
-OBJECTS+=include/kernel/ctype.o
-OBJECTS+=include/kernel/math.o
-OBJECTS+=include/kernel/string.o
-OBJECTS+=include/kernel/stdlib.o

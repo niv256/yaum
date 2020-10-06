@@ -2,7 +2,8 @@
 #include "modules.h"
 #include "screen.h"
 #include "shutdown.h"
-#include <kernel/string.h>
+#include "tools.h"
+#include <string.h>
 
 void user_input(char *input) {
   int module_index;

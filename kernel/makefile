@@ -1,10 +1,15 @@
+include ../libc/objects.mk
+
+LIBC_OBJS_KERNEL=$(addsuffix -kernel,$(addprefix ../libc/,$(LIBC_OBJS)))
+BUILD:=yaum.bin
+
 include objects.mk
 
 .PHONY: all clean
 
-all: yaum.bin
+all: $(BUILD)
 
-yaum.bin: $(OBJECTS)
+$(BUILD): $(OBJECTS) $(LIBC_OBJS_KERNEL)
 	$(LD) $^ -o $@ $(LD_FLAGS)
 
 %.o: %.c
@@ -13,5 +18,8 @@ yaum.bin: $(OBJECTS)
 %.o: %.asm
 	$(ASM) $(ASM_FLAGS) $< -o $@
 
+%.o-kernel: %.c
+	$(CC) $(CC_FLAGS) -c $< -o $@
+
 clean:
-	$(shell rm -rf *.o yaum.bin)
+	$(shell rm -rf $(OBJECTS) $(LIBC_OBJS_KERNEL) $(BUILD))
