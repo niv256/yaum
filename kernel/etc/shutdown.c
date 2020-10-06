@@ -1,5 +1,5 @@
-#include "shutdown.h"
-#include "tools.h"
+#include <etc/shutdown.h>
+#include <etc/tools.h>
 
 void shutdown(void) {
   outw(0x604, 0x2000);

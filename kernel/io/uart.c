@@ -1,5 +1,5 @@
-#include "uart.h"
-#include "tools.h"
+#include <etc/tools.h>
+#include <io/uart.h>
 
 #define COM1                    0x3f8
 #define TICKS_PER_SECOND        115200

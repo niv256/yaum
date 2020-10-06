@@ -1,6 +1,6 @@
-#include "timer.h"
-#include "isr.h"
-#include "screen.h"
+#include <arch/i386/isr.h>
+#include <etc/timer.h>
+#include <io/screen.h>
 
 #define TICK 55
 

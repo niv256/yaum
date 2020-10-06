@@ -1,6 +1,6 @@
-#include "modules.h"
-#include "panic.h"
-#include "screen.h"
+#include <etc/modules.h>
+#include <etc/panic.h>
+#include <io/screen.h>
 #include <stdlib.h>
 #include <string.h>
 

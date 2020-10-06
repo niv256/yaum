@@ -1,6 +1,6 @@
-#include "tools.h"
-#include "screen.h"
 #include <ctype.h>
+#include <etc/tools.h>
+#include <io/screen.h>
 #include <string.h>
 
 void outb(uint16_t port, uint8_t val) {

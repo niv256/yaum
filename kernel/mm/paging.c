@@ -1,7 +1,7 @@
-#include "paging.h"
-#include "isr.h"
-#include "panic.h"
-#include "screen.h"
+#include <arch/i386/isr.h>
+#include <etc/panic.h>
+#include <io/screen.h>
+#include <mm/paging.h>
 
 static void init_pd(void);
 static void init_pt(void);

@@ -1,6 +1,6 @@
-#include "screen.h"
-#include "tools.h"
-#include "uart.h"
+#include <etc/tools.h>
+#include <io/screen.h>
+#include <io/uart.h>
 #include <stdlib.h>
 #include <string.h>
 

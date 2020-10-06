@@ -1,8 +1,8 @@
-#include "shell.h"
-#include "modules.h"
-#include "screen.h"
-#include "shutdown.h"
-#include "tools.h"
+#include <etc/modules.h>
+#include <etc/shutdown.h>
+#include <etc/tools.h>
+#include <io/screen.h>
+#include <io/shell.h>
 #include <string.h>
 
 void user_input(char *input) {

@@ -1,7 +1,7 @@
-#include "isr.h"
-#include "panic.h"
-#include "screen.h"
-#include "tools.h"
+#include <arch/i386/isr.h>
+#include <etc/panic.h>
+#include <etc/tools.h>
+#include <io/screen.h>
 
 #define NUMBER_CALLBACKS 256
 

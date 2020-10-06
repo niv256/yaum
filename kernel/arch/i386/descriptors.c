@@ -1,8 +1,8 @@
-#include "descriptors.h"
-#include "isr.h"
-#include "keyboard.h"
-#include "screen.h"
-#include "tools.h"
+#include <arch/i386/descriptors.h>
+#include <arch/i386/isr.h>
+#include <etc/tools.h>
+#include <io/keyboard.h>
+#include <io/screen.h>
 
 #define NUMBER_IDT_ENTRIES 256
 #define NUMBER_GDT_ENTRIES 5

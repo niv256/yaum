@@ -1,11 +1,11 @@
-#include "bargs.h"
-#include "descriptors.h"
-#include "keyboard.h"
-#include "modules.h"
-#include "paging.h"
-#include "screen.h"
-#include "timer.h"
-#include "uart.h"
+#include <arch/i386/descriptors.h>
+#include <etc/bargs.h>
+#include <etc/modules.h>
+#include <etc/timer.h>
+#include <io/keyboard.h>
+#include <io/screen.h>
+#include <io/uart.h>
+#include <mm/paging.h>
 
 #if defined(__linux__) || !defined(__i686__)
 #error "Either not using a cross-compiler or not an x86 elf compiler"

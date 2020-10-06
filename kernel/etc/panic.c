@@ -1,5 +1,5 @@
-#include "panic.h"
-#include "screen.h"
+#include <etc/panic.h>
+#include <io/screen.h>
 
 static void print_info(void);
 

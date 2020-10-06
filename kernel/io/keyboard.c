@@ -1,7 +1,7 @@
-#include "keyboard.h"
-#include "screen.h"
-#include "shell.h"
-#include "tools.h"
+#include <etc/tools.h>
+#include <io/keyboard.h>
+#include <io/screen.h>
+#include <io/shell.h>
 
 #define MAX_KEY_VAL 0xb6
 
