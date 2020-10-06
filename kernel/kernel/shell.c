@@ -2,7 +2,7 @@
 #include "modules.h"
 #include "screen.h"
 #include "shutdown.h"
-#include <string.h>
+#include <kernel/string.h>
 
 void user_input(char *input) {
   int module_index;

@@ -1,8 +1,8 @@
 #include "modules.h"
 #include "panic.h"
 #include "screen.h"
-#include <stdlib.h>
-#include <string.h>
+#include <kernel/stdlib.h>
+#include <kernel/string.h>
 
 #define MDL_PATH "/modules/"
 #define MDL_LOGO "logo.txt"
