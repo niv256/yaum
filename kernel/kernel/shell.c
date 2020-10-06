@@ -2,6 +2,7 @@
 #include "modules.h"
 #include "screen.h"
 #include "shutdown.h"
+#include "tools.h"
 #include <string.h>
 
 void user_input(char *input) {
@@ -18,7 +19,7 @@ void user_input(char *input) {
     reboot();
   } else if (strcmp(trimmed, "")) {
     terminal_writestring("at least say SOMETHING...\n");
-  } else if ((module_index = get_module_index(trimmed)) != -1) {
+  } else if ((module_index = get_exec_module_index(trimmed)) != -1) {
     uint32_t ret = execute_binary_modules(module_index);
     terminal_writestring("return value: ");
     terminal_writehex(ret);

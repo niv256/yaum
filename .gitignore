@@ -1,5 +1,8 @@
 *.o
+*.o-kernel
 *.bin
 *.iso
 *.d
 tags
+
+modules/modules
