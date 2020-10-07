@@ -10,7 +10,7 @@ OBJECTS+=arch/i386/pmode.o
 
 OBJECTS+=boot/boot.o
 
-OBJECTS+=etc/kargs.o
+OBJECTS+=etc/magic.o
 OBJECTS+=etc/modules.o
 OBJECTS+=etc/panic.o
 OBJECTS+=etc/shutdown.o

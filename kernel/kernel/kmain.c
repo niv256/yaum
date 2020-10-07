@@ -1,10 +1,9 @@
 #include <arch/i386/descriptors.h>
-#include <etc/kargs.h>
+#include <etc/magic.h>
 #include <etc/modules.h>
 #include <etc/timer.h>
 #include <io/keyboard.h>
 #include <io/screen.h>
-#include <io/uart.h>
 #include <mm/paging.h>
 
 #if defined(__linux__) || !defined(__i686__)
@@ -12,11 +11,16 @@
 #endif
 
 int kmain(multiboot_info_t *mbt, uint32_t magic) {
-  init_uart();
-  init_kargs(mbt, magic);
-
   terminal_initialize();
+
+  validate_magic(magic);
+
+  init_modules(mbt);
   write_logo();
+  terminal_newline();
+
+  terminal_writestring("screen initialized.\n");
+  terminal_writestring("modules initialized.\n");
 
   gdt_init();
   terminal_writestring("gdt initialized.\n");

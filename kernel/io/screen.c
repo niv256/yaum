@@ -40,6 +40,8 @@ void terminal_initialize(void) {
       terminal_buffer[index] = vga_entry(' ', terminal_color);
     }
   }
+
+  init_uart();
 }
 
 static void terminal_putentryat(unsigned char c, uint8_t color, uint32_t x,
