@@ -1,0 +1,46 @@
+#include <stdarg.h>
+
+
+uint32_t printf(const char *format) {
+
+  uint32_t total = 0;
+  va_list args;
+  
+  va_start(args, format);
+  
+  for(char* i = format; 0 != i; ++i) {
+    while('%' != *i)
+    {
+      terminal_writechar(*(i++));
+      ++total;
+    }
+
+    ++i;
+    ++total;
+
+    switch(*i) {
+      case 'd':
+        terminal_writedec(va_arg(args, uint32_t));
+        break;
+
+      case 'X':
+        terminal_writehex(va_arg(args, uint32_t));
+        break;
+
+      case 'c':
+        terminal_writechar(va_arg(args, unsigned char));
+        break;
+
+      case 'S':
+        terminal_writestring(va_arg(args, char *));
+        break;
+    
+      default:
+        terminal_writechar(*(i-1));
+        terminal_writechar(*i)
+        break;
+    }
+  }
+  va_end(args);
+  return total;
+}
