@@ -1,7 +1,7 @@
 #include <string.h>
 
-void *memcpy(char *dest, const char *src, uint32_t size) {
+void *memcpy(void *dest, const void *src, uint32_t size) {
   for (uint32_t i = 0; i < size; i++)
-    dest[i] = src[i];
+    ((char *)dest)[i] = ((char *)src)[i];
   return dest;
 }
