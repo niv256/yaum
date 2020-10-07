@@ -1,6 +1,6 @@
 #include <stdarg.h>
 
-int printf(char *format) {
+int printf(char *format, ...) {
   int total = 0;
   va_list args;
   
