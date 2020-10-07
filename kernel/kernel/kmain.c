@@ -1,5 +1,5 @@
 #include <arch/i386/descriptors.h>
-#include <etc/bargs.h>
+#include <etc/kargs.h>
 #include <etc/modules.h>
 #include <etc/timer.h>
 #include <io/keyboard.h>
@@ -13,7 +13,7 @@
 
 int kmain(multiboot_info_t *mbt, uint32_t magic) {
   init_uart();
-  init_bargs(mbt, magic);
+  init_kargs(mbt, magic);
 
   terminal_initialize();
   write_logo();
