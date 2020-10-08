@@ -5,12 +5,13 @@
 #include <string.h>
 
 #define MDL_PATH      "/modules/"
-#define MDL_EXEC_PATH "/modules/executables/"
-#define MDL_LOGO      "text/logo.txt"
+#define MDL_TEXT_PATH (MDL_PATH "text/")
+#define MDL_EXEC_PATH (MDL_PATH "executables/")
+#define MDL_LOGO      "logo.txt"
 
 typedef uint32_t (*func)(void);
 
-static void validate_index(size_t index);
+static size_t get_module_index(const char *module_name, char *path);
 
 size_t mods_count;
 multiboot_module_t *mods;
@@ -20,32 +21,20 @@ void init_modules(multiboot_info_t *mbt) {
   mods       = (multiboot_module_t *)mbt->mods_addr;
 }
 
-static void validate_index(size_t index) {
-  if (index >= mods_count) {
-    PANIC("invalid module index");
-  }
-}
-
-size_t get_module_index(const char *module_name) {
+static size_t get_module_index(const char *module_name, char *path) {
   for (size_t i = 0; i < mods_count; i++) {
-    if (strcmp((char *)mods[i].cmdline + strlen(MDL_PATH), module_name)) {
+    if (strcmp((char *)mods[i].cmdline + strlen(path), module_name)) {
       return i;
     }
   }
   return -1;
 }
 
-size_t get_exec_module_index(const char *module_name) {
-  for (size_t i = 0; i < mods_count; i++) {
-    if (strcmp((char *)mods[i].cmdline + strlen(MDL_EXEC_PATH), module_name)) {
-      return i;
-    }
+int print_module(const char *module_name) {
+  size_t index = get_module_index(module_name, MDL_TEXT_PATH);
+  if (index == -1) {
+    return 1;
   }
-  return -1;
-}
-
-int print_text_module(size_t index) {
-  validate_index(index);
 
   uint32_t mod_start = mods[index].mod_start;
   uint32_t mod_end   = mods[index].mod_end;
@@ -54,16 +43,18 @@ int print_text_module(size_t index) {
 }
 
 void write_logo(void) {
-  int module_index = get_module_index(MDL_LOGO);
-  if (module_index == -1) {
+  if (print_module(MDL_LOGO)) {
     PANIC("yaum isodir/modules/logo.txt missing");
   }
-  print_text_module(module_index);
 }
 
-int execute_binary_modules(size_t index) {
-  validate_index(index);
+int execute_module(const char *module_name, uint32_t *ret) {
+  size_t index = get_module_index(module_name, MDL_EXEC_PATH);
+  if (index == -1) {
+    return 1;
+  }
 
   func mod_start = (func)mods[index].mod_start;
-  return mod_start();
+  *ret           = mod_start();
+  return 0;
 }
