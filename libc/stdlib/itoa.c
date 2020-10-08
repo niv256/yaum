@@ -29,8 +29,8 @@ char *itoa(int value, char *str, int base) {
   // Invert the numbers.
   while (low < ptr) {
     char tmp = *low;
-    *low++ = *ptr;
-    *ptr-- = tmp;
+    *low++   = *ptr;
+    *ptr--   = tmp;
   }
   return rc;
 }
