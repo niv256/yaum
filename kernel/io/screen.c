@@ -1,6 +1,7 @@
 #include <etc/tools.h>
 #include <io/screen.h>
 #include <io/uart.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,7 +10,7 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color);
 static void terminal_putentryat(unsigned char c, uint8_t color, uint32_t x,
                                 uint32_t y);
 static void terminal_scroll_down(void);
-static int can_delete(void);
+static bool can_delete(void);
 static void terminal_writeint(uint32_t number, int base);
 static void terminal_lock(void);
 
@@ -169,7 +170,7 @@ static void terminal_lock(void) {
   terminal_column_lock = terminal_column;
 }
 
-static int can_delete(void) {
+static bool can_delete(void) {
   return (terminal_row_lock != terminal_row ||
           terminal_column_lock != terminal_column);
 }

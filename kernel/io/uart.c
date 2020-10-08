@@ -1,5 +1,6 @@
 #include <etc/tools.h>
 #include <io/uart.h>
+#include <stdbool.h>
 
 #define COM1                    0x3f8
 #define TICKS_PER_SECOND        115200
@@ -9,7 +10,7 @@
 
 #define LSR_BUF_EMPTY 3
 
-static int is_transmit_empty(void);
+static bool is_transmit_empty(void);
 
 void init_uart(void) {
   // disable interrupts
@@ -28,7 +29,7 @@ void init_uart(void) {
   outb(COM1 + 4, 0x0B); // IRQs enabled, RTS/DSR set
 }
 
-static int is_transmit_empty(void) {
+static bool is_transmit_empty(void) {
   uint8_t line_status_register = inb(COM1 + 5);
   return (line_status_register & (1 << LSR_BUF_EMPTY)) != 0;
 }

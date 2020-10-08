@@ -6,7 +6,7 @@
 
 size_t ticks;
 size_t interval;
-uint8_t verbose;
+bool verbose;
 
 static void watch(registers_t regs) {
   if (verbose && ticks % interval < TICK) {
@@ -17,13 +17,13 @@ static void watch(registers_t regs) {
   ticks += TICK;
 }
 
-void timer_init(uint8_t verbose, size_t interval) {
+void timer_init(bool verbose, size_t interval) {
   setup_isr_callback(IRQ0, &watch);
   timer_set_verbose(verbose);
   timer_set_print_interval_ms(interval);
 }
 
-void timer_set_verbose(uint8_t _verbose) {
+void timer_set_verbose(bool _verbose) {
   verbose = _verbose;
 }
 
