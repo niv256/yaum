@@ -1,7 +1,7 @@
 #ifndef MODULES_H
 #define MODULES_H
 
-#include "multiboot.h"
+#include <multiboot.h>
 #include <stdint.h>
 
 void init_modules(multiboot_info_t *mbt);
