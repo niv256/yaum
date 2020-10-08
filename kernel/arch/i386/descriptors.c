@@ -3,6 +3,7 @@
 #include <etc/tools.h>
 #include <io/keyboard.h>
 #include <io/screen.h>
+#include <stddef.h>
 
 #define NUMBER_IDT_ENTRIES 256
 #define NUMBER_GDT_ENTRIES 5
@@ -272,7 +273,7 @@ extern void set_pmode(void);
 
 static void irq_init(void);
 void watch(void);
-static void set_idt_entry(int index, uint32_t offset, uint16_t selector,
+static void set_idt_entry(size_t index, uint32_t offset, uint16_t selector,
                           uint8_t flags);
 
 struct gdt_entry {
@@ -362,7 +363,7 @@ static idt_entry create_idt_entry(uint32_t offset, uint16_t selector,
   return entry_to_fill;
 }
 
-static void set_idt_entry(int index, uint32_t offset, uint16_t selector,
+static void set_idt_entry(size_t index, uint32_t offset, uint16_t selector,
                           uint8_t flags) {
   idt_entry temp_entry = create_idt_entry(offset, selector, flags);
   idt_entries[index]   = temp_entry;

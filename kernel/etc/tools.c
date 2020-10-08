@@ -59,12 +59,12 @@ char *binrep(char *dst, uint8_t num) {
   return dst;
 }
 
-uint32_t trim(char *out, uint32_t len, const char *str) {
+size_t trim(char *out, size_t len, const char *str) {
   if (len == 0)
     return 0;
 
   const char *end;
-  uint32_t out_size;
+  size_t out_size;
 
   // Trim leading space
   while (isspace((unsigned char)*str))

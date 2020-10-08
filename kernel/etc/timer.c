@@ -4,8 +4,8 @@
 
 #define TICK 55
 
-uint32_t ticks;
-uint32_t interval;
+size_t ticks;
+size_t interval;
 uint8_t verbose;
 
 static void watch(registers_t regs) {
@@ -17,7 +17,7 @@ static void watch(registers_t regs) {
   ticks += TICK;
 }
 
-void timer_init(uint8_t verbose, uint32_t interval) {
+void timer_init(uint8_t verbose, size_t interval) {
   setup_isr_callback(IRQ0, &watch);
   timer_set_verbose(verbose);
   timer_set_print_interval_ms(interval);
@@ -27,10 +27,10 @@ void timer_set_verbose(uint8_t _verbose) {
   verbose = _verbose;
 }
 
-void timer_set_print_interval_ms(uint32_t _interval) {
+void timer_set_print_interval_ms(size_t _interval) {
   interval = _interval;
 }
 
-void timer_set_print_interval_seconds(uint32_t _interval) {
+void timer_set_print_interval_seconds(size_t _interval) {
   interval = SECOND_TO_MS(_interval);
 }

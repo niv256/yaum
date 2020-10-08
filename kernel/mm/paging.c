@@ -2,6 +2,7 @@
 #include <etc/panic.h>
 #include <io/screen.h>
 #include <mm/paging.h>
+#include <stddef.h>
 
 static void init_pd(void);
 static void init_pt(void);
@@ -20,14 +21,14 @@ void init_paging(void) {
 
 static void init_pd(void) {
   // blank pdes
-  for (int i = 0; i < PDE_IN_DIRECTORY; i++) {
+  for (size_t i = 0; i < PDE_IN_DIRECTORY; i++) {
     page_directory[i] = PAGE_WRITE;
   }
   page_directory[0] = (uint32_t)&page_table | PAGE_PRESENT | PAGE_USER;
 }
 
 static void init_pt(void) {
-  for (int i = 0; i < PTE_IN_TABLE; i++) {
+  for (size_t i = 0; i < PTE_IN_TABLE; i++) {
     // set frame as i
     page_table[i] = (i << (32 - 20)) | PAGE_PRESENT | PAGE_WRITE;
   }

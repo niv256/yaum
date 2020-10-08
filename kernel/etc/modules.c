@@ -10,24 +10,24 @@
 
 typedef uint32_t (*func)(void);
 
-static void validate_index(uint8_t index);
+static void validate_index(size_t index);
 
-uint32_t mods_count;
+size_t mods_count;
 multiboot_module_t *mods;
 
 void init_modules(multiboot_info_t *mbt) {
-  mods_count = mbt->mods_count;
+  mods_count = (size_t)mbt->mods_count;
   mods       = (multiboot_module_t *)mbt->mods_addr;
 }
 
-static void validate_index(uint8_t index) {
+static void validate_index(size_t index) {
   if (index >= mods_count) {
     PANIC("invalid module index");
   }
 }
 
-int get_module_index(const char *module_name) {
-  for (int i = 0; i < mods_count; i++) {
+size_t get_module_index(const char *module_name) {
+  for (size_t i = 0; i < mods_count; i++) {
     if (strcmp((char *)mods[i].cmdline + strlen(MDL_PATH), module_name)) {
       return i;
     }
@@ -35,8 +35,8 @@ int get_module_index(const char *module_name) {
   return -1;
 }
 
-int get_exec_module_index(const char *module_name) {
-  for (int i = 0; i < mods_count; i++) {
+size_t get_exec_module_index(const char *module_name) {
+  for (size_t i = 0; i < mods_count; i++) {
     if (strcmp((char *)mods[i].cmdline + strlen(MDL_EXEC_PATH), module_name)) {
       return i;
     }
@@ -44,7 +44,7 @@ int get_exec_module_index(const char *module_name) {
   return -1;
 }
 
-int print_text_module(uint8_t index) {
+int print_text_module(size_t index) {
   validate_index(index);
 
   uint32_t mod_start = mods[index].mod_start;
@@ -61,7 +61,7 @@ void write_logo(void) {
   print_text_module(module_index);
 }
 
-int execute_binary_modules(uint8_t index) {
+int execute_binary_modules(size_t index) {
   validate_index(index);
 
   func mod_start = (func)mods[index].mod_start;

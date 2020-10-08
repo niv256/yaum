@@ -4,18 +4,18 @@
 #include <mm/malloc.h>
 #include <stddef.h>
 
-static char get_bit(char idx);
-static void set_bit(char idx);
-static void unset_bit(char idx);
-static char find_cave(int count);
-static void set_range(char start, char count);
-static void unset_range(char start, char count);
-static void add_alloc(int idx, int size);
-static void remove_alloc(int idx);
-static int first_inactive_alloc(void);
-static int find_alloc(int idx);
-static void __alloc(int start, int buckets);
-static void __free(int idx);
+static char get_bit(size_t idx);
+static void set_bit(size_t idx);
+static void unset_bit(size_t idx);
+static size_t find_cave(size_t count);
+static void set_range(size_t start, size_t count);
+static void unset_range(size_t start, size_t count);
+static void add_alloc(size_t idx, size_t size);
+static void remove_alloc(size_t idx);
+static size_t first_inactive_alloc(void);
+static size_t find_alloc(size_t idx);
+static void __alloc(size_t start, size_t buckets);
+static void __free(size_t idx);
 
 heap_t heap;
 /*
@@ -25,25 +25,25 @@ heap_t heap;
 bitmap_t bitmap;
 allocs_t allocs;
 
-static char get_bit(char idx) {
+static char get_bit(size_t idx) {
   // return (bitmap >> (BITMAP_SIZE - idx)) & 1;
   return (bitmap >> idx) & 1;
 }
 
-static void set_bit(char idx) {
+static void set_bit(size_t idx) {
   // bitmap |= 1 << (BITMAP_SIZE - 1 - idx);
   bitmap |= 1 << idx;
 }
 
-static void unset_bit(char idx) {
+static void unset_bit(size_t idx) {
   // bitmap &= ~(1 >> idx);
   bitmap &= ~(1 << idx);
 }
 
-static char find_cave(int count) {
-  int cur   = 0;
-  int start = 0;
-  int idx   = 0;
+static size_t find_cave(size_t count) {
+  size_t cur   = 0;
+  size_t start = 0;
+  size_t idx   = 0;
 
   while (cur < count && idx < BITMAP_SIZE) {
     if (get_bit(idx++)) {
@@ -61,33 +61,33 @@ static char find_cave(int count) {
   return start;
 }
 
-static void set_range(char start, char count) {
-  for (int i = start; i < start + count; i++) {
+static void set_range(size_t start, size_t count) {
+  for (size_t i = start; i < start + count; i++) {
     set_bit(i);
   }
 }
 
-static void unset_range(char start, char count) {
-  for (int i = start; i < start + count; i++) {
+static void unset_range(size_t start, size_t count) {
+  for (size_t i = start; i < start + count; i++) {
     unset_bit(i);
   }
 }
 
-static void add_alloc(int idx, int size) {
-  int i = first_inactive_alloc();
+static void add_alloc(size_t idx, size_t size) {
+  size_t i = first_inactive_alloc();
 
   allocs[i].active = 1;
   allocs[i].idx    = idx;
   allocs[i].size   = size;
 }
 
-static void remove_alloc(int idx) {
-  int i            = find_alloc(idx);
+static void remove_alloc(size_t idx) {
+  size_t i         = find_alloc(idx);
   allocs[i].active = 0;
 }
 
-static int first_inactive_alloc(void) {
-  int i;
+static size_t first_inactive_alloc(void) {
+  size_t i;
   for (i = 0; i < ALLOCS; i++) {
     if (!allocs[i].active) {
       break;
@@ -101,8 +101,8 @@ static int first_inactive_alloc(void) {
   return i;
 }
 
-static int find_alloc(int idx) {
-  int i;
+static size_t find_alloc(size_t idx) {
+  size_t i;
   for (i = 0; i < ALLOCS; i++) {
     if (allocs[i].idx == idx) {
       break;
@@ -116,12 +116,12 @@ static int find_alloc(int idx) {
   return i;
 }
 
-void *kmalloc(int size) {
+void *kmalloc(size_t size) {
   if (size < BUCKET_SIZE) {
     size = BUCKET_SIZE;
   }
 
-  int buckets = (int)ceil((float)size / BUCKET_SIZE);
+  size_t buckets = (size_t)ceil((float)size / BUCKET_SIZE);
 
   char start = find_cave(buckets);
   if (start == -1) {
@@ -132,18 +132,18 @@ void *kmalloc(int size) {
   return heap + start * BUCKET_SIZE;
 }
 
-static void __alloc(int start, int buckets) {
+static void __alloc(size_t start, size_t buckets) {
   set_range(start, buckets);
   add_alloc(start, buckets);
 }
 
 void kfree(void *ptr) {
-  int idx = (int)((char *)ptr - heap) / BUCKET_SIZE;
+  size_t idx = (size_t)((char *)ptr - heap) / BUCKET_SIZE;
   __free(idx);
 }
 
-static void __free(int idx) {
-  int i = find_alloc(idx);
+static void __free(size_t idx) {
+  size_t i = find_alloc(idx);
   unset_range(idx, allocs[i].size);
   remove_alloc(i);
 }

@@ -6,7 +6,7 @@
 #define MAX_KEY_VAL 0xb6
 
 static char input_buffer[256];
-static int buffer_index;
+static size_t buffer_index;
 static char caps_state;
 static char shift_state;
 

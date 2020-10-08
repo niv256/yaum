@@ -5,7 +5,7 @@ int strcmp(const char *str1, const char *str2) {
     return 0;
   }
 
-  for (int i = 0; i < strlen(str1); i++) {
+  for (size_t i = 0; i < strlen(str1); i++) {
     if (str1[i] != str2[i]) {
       return 0;
     }

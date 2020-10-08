@@ -6,7 +6,7 @@
 #include <string.h>
 
 void user_input(char *input) {
-  int module_index;
+  size_t module_index;
   char trimmed[256];
   trim(trimmed, 256, input);
 
