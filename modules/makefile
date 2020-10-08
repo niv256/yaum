@@ -20,7 +20,7 @@ $(TEXT): clean
 
 clean:
 	$(shell truncate --size 0 modules)
-	$(shell rm ../isodir/boot/grub/menu.lst)
+	$(shell truncate --size 0 ../isodir/boot/grub/menu.lst)
 
 define write_to_modules
 	echo -n 'module ' >> modules
