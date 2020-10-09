@@ -1,5 +1,6 @@
 #include <io/screen.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 int vprintf(const char *format, va_list ap) {
   int total = 0;
@@ -26,6 +27,12 @@ int vprintf(const char *format, va_list ap) {
         }
         case '%': {
           terminal_writechar('%');
+          break;
+        }
+        case '\0': {
+          // reached end of string, decrease i so the loop will stop after the
+          // current iteration and don't print anything.
+          i--;
           break;
         }
         default: {

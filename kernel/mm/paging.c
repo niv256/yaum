@@ -1,8 +1,8 @@
 #include <arch/i386/isr.h>
 #include <etc/panic.h>
-#include <io/screen.h>
 #include <mm/paging.h>
 #include <stddef.h>
+#include <stdio.h>
 
 static void init_pd(void);
 static void init_pt(void);
@@ -49,18 +49,16 @@ static void page_fault(registers_t regs) {
   } err_code;
   err_code.code = regs.err_code;
 
-  terminal_writestring("page fault: (");
+  printf("page fault: (");
   if (err_code.present)
-    terminal_writestring("page not present, ");
+    printf("page not present, ");
   if (err_code.write)
-    terminal_writestring("read only page, ");
+    printf("read only page, ");
   if (err_code.user)
-    terminal_writestring("kernel mode only page, ");
+    printf("kernel mode only page, ");
   if (err_code.reserved)
-    terminal_writestring("reserved page, ");
-  terminal_writestring(") at address ");
-  terminal_writehex(fault_addr);
-  terminal_newline();
+    printf("reserved page, ");
+  printf(") at address 0x%x\n", fault_addr);
 
   PANIC("page fault");
 }
