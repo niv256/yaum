@@ -102,16 +102,12 @@ void terminal_writedec(uint32_t number) {
 }
 
 void terminal_writehex(uint32_t number) {
-  terminal_writechar('0');
-  terminal_writechar('x');
   terminal_writeint(number, 16);
 }
 
 void terminal_writebin(uint8_t number) {
   char bin[9];
   binrep(bin, number);
-  terminal_writechar('0');
-  terminal_writechar('b');
   terminal_writestring(bin);
 }
 

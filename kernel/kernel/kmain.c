@@ -5,6 +5,7 @@
 #include <io/keyboard.h>
 #include <io/screen.h>
 #include <mm/paging.h>
+#include <stdio.h>
 
 #if defined(__linux__) || !defined(__i686__)
 #error "Either not using a cross-compiler or not an x86 elf compiler"
