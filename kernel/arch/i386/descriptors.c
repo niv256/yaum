@@ -3,10 +3,12 @@
 #include <etc/tools.h>
 #include <io/keyboard.h>
 #include <io/screen.h>
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #define NUMBER_IDT_ENTRIES 256
-#define NUMBER_GDT_ENTRIES 5
+#define NUMBER_GDT_ENTRIES 6
 
 // declare the interrupt service routines
 extern void isr0();
@@ -267,6 +269,7 @@ extern void isr254();
 extern void isr255();
 
 extern void gdt_write(uint32_t);
+extern void tss_write(void);
 extern void idt_write(uint32_t);
 extern void enable_a20(void);
 extern void set_pmode(void);
@@ -295,6 +298,66 @@ struct gdt_ptr {
 } __attribute__((packed));
 typedef struct gdt_ptr gdt_ptr;
 
+struct tss_entry {
+  uint16_t link;
+  uint16_t rsvd1;
+  uint32_t esp0;
+  uint16_t ss0;
+  uint16_t rsvd2;
+  uint32_t esp1;
+  uint16_t ss1;
+  uint16_t rsvd3;
+  uint32_t esp2;
+  uint16_t ss2;
+  uint16_t rsvd4;
+  uint32_t cr3;
+  uint32_t eip;
+  uint32_t eflags;
+  uint32_t eax;
+  uint32_t ecx;
+  uint32_t edx;
+  uint32_t ebx;
+  uint32_t esp;
+  uint32_t ebp;
+  uint32_t esi;
+  uint32_t edi;
+  uint16_t es;
+  uint16_t rsvd5;
+  uint16_t cs;
+  uint16_t rsvd6;
+  uint16_t ss;
+  uint16_t rsvd7;
+  uint16_t ds;
+  uint16_t rsvd8;
+  uint16_t fs;
+  uint16_t rsvd9;
+  uint16_t gs;
+  uint16_t rsvd10;
+  uint16_t ldtr;
+  uint16_t rsvd11;
+  uint16_t rsvd12;
+  uint16_t iopb_offset;
+} __attribute__((packed));
+typedef struct tss_entry tss_entry_t;
+
+struct tss_descriptor {
+  uint32_t limit_first_16 : 16;
+  uint32_t base_first_24 : 24;
+  uint32_t always_1 : 1;
+  uint32_t busy : 1;
+  uint32_t always_0 : 1;
+  uint32_t always_1_2 : 1;
+  uint32_t always_0_2 : 1;
+  uint32_t DPL : 2;
+  uint32_t present : 1;
+  uint32_t limit_last_4 : 4;
+  uint32_t avail : 1;
+  uint32_t always_0_3 : 2;
+  uint32_t granularity : 1;
+  uint32_t base_last_8 : 8;
+} __attribute__((packed));
+typedef struct tss_descriptor tss_descriptor;
+
 struct idt_entry {
   uint16_t offset_first_16;
   uint16_t selector;
@@ -314,6 +377,7 @@ struct idt_ptr {
 typedef struct idt_ptr idt_ptr;
 
 gdt_entry gdt_entries[NUMBER_GDT_ENTRIES];
+tss_entry_t tss_entry;
 idt_entry idt_entries[NUMBER_IDT_ENTRIES];
 
 static gdt_entry create_gdt_entry(uint32_t base, uint32_t limit,
@@ -331,6 +395,28 @@ static gdt_entry create_gdt_entry(uint32_t base, uint32_t limit,
   return entry_to_fill;
 }
 
+static gdt_entry create_tss_descriptor(uint32_t base, uint32_t limit, bool busy,
+                                       int DPL, int present, bool granularity) {
+  tss_descriptor descriptor_to_fill;
+
+  descriptor_to_fill.limit_first_16 = limit & 0xFFFF;
+  descriptor_to_fill.base_first_24  = base & 0xFFFFFF;
+  descriptor_to_fill.always_1       = 1;
+  descriptor_to_fill.busy           = busy;
+  descriptor_to_fill.always_0       = 0;
+  descriptor_to_fill.always_1_2     = 1;
+  descriptor_to_fill.always_0_2     = 0;
+  descriptor_to_fill.DPL            = DPL;
+  descriptor_to_fill.present        = present;
+  descriptor_to_fill.limit_last_4   = limit >> (32 - 4);
+  descriptor_to_fill.always_0_3     = 0;
+  descriptor_to_fill.granularity    = granularity;
+  descriptor_to_fill.base_last_8    = (base >> 24) & 0xFF;
+
+  // a bit hacky, but not as much as intel :P
+  return *(gdt_entry *)&descriptor_to_fill;
+}
+
 void gdt_init(void) {
   // fill the entries
   gdt_entries[0] = create_gdt_entry(0, 0, 0, 0);                // null entry
@@ -338,6 +424,14 @@ void gdt_init(void) {
   gdt_entries[2] = create_gdt_entry(0, 0xFFFFFFFF, 0x92, 0xCF); // kernel data
   gdt_entries[3] = create_gdt_entry(0, 0xFFFFFFFF, 0xFA, 0xCF); // user code
   gdt_entries[4] = create_gdt_entry(0, 0xFFFFFFFF, 0xF2, 0xCF); // user data
+  gdt_entries[5] = create_tss_descriptor(
+      (uint32_t)&tss_entry, sizeof(tss_entry_t), 0, 3, 1, 0); // TSS
+}
+
+void tss_init(void) {
+  tss_entry.ss0 = 0x10; // kernel data
+  // tss_entry.esp0 = ; // stack pointer for syscalls
+  tss_entry.iopb_offset = sizeof(tss_entry_t);
 }
 
 void enter_pmode(void) {
@@ -347,6 +441,7 @@ void enter_pmode(void) {
 
   asm("cli"); // sti only after loading idt to avoid triple faut
   gdt_write((uint32_t)&ptr_to_gdt);
+  tss_write();
   set_pmode();
 }
 

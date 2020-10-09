@@ -25,6 +25,9 @@ int kmain(multiboot_info_t *mbt, uint32_t magic) {
   gdt_init();
   terminal_writestring("gdt initialized.\n");
 
+  tss_init();
+  terminal_writestring("tss initialized.\n");
+
   enter_pmode();
   terminal_writestring("entered protected mode.\n");
 
