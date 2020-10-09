@@ -10,6 +10,9 @@
 #error "Either not using a cross-compiler or not an x86 elf compiler"
 #endif
 
+extern void jump_usermode(uint32_t);
+extern void userspace_func(void);
+
 int kmain(multiboot_info_t *mbt, uint32_t magic) {
   terminal_initialize();
 
@@ -42,6 +45,9 @@ int kmain(multiboot_info_t *mbt, uint32_t magic) {
 
   keyboard_init();
   terminal_writestring("keyboard initialized.\n");
+
+  terminal_writestring("\n\njumping to user space:\n");
+  jump_usermode((uint32_t)userspace_func);
 
   terminal_writestring("\nshell:\n> ");
 

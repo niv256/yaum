@@ -429,8 +429,11 @@ void gdt_init(void) {
 }
 
 void tss_init(void) {
-  tss_entry.ss0 = 0x10; // kernel data
-  // tss_entry.esp0 = ; // stack pointer for syscalls
+  // TODO: set stack properly
+  static uint8_t stack[0x1000];
+
+  tss_entry.ss0         = 0x10;             // kernel data
+  tss_entry.esp0        = (uint32_t)&stack; // stack pointer for syscalls
   tss_entry.iopb_offset = sizeof(tss_entry_t);
 }
 
@@ -473,6 +476,9 @@ void idt_init(void) {
   // selector: kernel code in ring 0 (row 2) so 0x08
   // flags: gate type 0b1111 for 32bit interrupt, ring 0 DPL and not unused so
   // 0x8e
+
+  // for the 0x80 syscall gate, use a trap instead and ring 3 DPL
+
   set_idt_entry(0, (uint32_t)isr0, 0x08, 0x8e);
   set_idt_entry(1, (uint32_t)isr1, 0x08, 0x8e);
   set_idt_entry(2, (uint32_t)isr2, 0x08, 0x8e);
@@ -601,7 +607,11 @@ void idt_init(void) {
   set_idt_entry(125, (uint32_t)isr125, 0x08, 0x8e);
   set_idt_entry(126, (uint32_t)isr126, 0x08, 0x8e);
   set_idt_entry(127, (uint32_t)isr127, 0x08, 0x8e);
-  set_idt_entry(128, (uint32_t)isr128, 0x08, 0x8e);
+
+  // syscall
+  // TODO: please make all of this file clearer!
+  set_idt_entry(128, (uint32_t)isr128, 0x08, 0x8e | (0x3 << 5));
+
   set_idt_entry(129, (uint32_t)isr129, 0x08, 0x8e);
   set_idt_entry(130, (uint32_t)isr130, 0x08, 0x8e);
   set_idt_entry(131, (uint32_t)isr131, 0x08, 0x8e);
