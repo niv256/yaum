@@ -274,6 +274,8 @@ extern void idt_write(uint32_t);
 extern void enable_a20(void);
 extern void set_pmode(void);
 
+extern uint8_t syscall_stack[];
+
 static void irq_init(void);
 void watch(void);
 static void set_idt_entry(size_t index, uint32_t offset, uint16_t selector,
@@ -429,11 +431,8 @@ void gdt_init(void) {
 }
 
 void tss_init(void) {
-  // TODO: set stack properly
-  static uint8_t stack[0x1000];
-
-  tss_entry.ss0         = 0x10;             // kernel data
-  tss_entry.esp0        = (uint32_t)&stack; // stack pointer for syscalls
+  tss_entry.ss0  = 0x10;                     // kernel data
+  tss_entry.esp0 = (uint32_t)&syscall_stack; // stack pointer for syscalls
   tss_entry.iopb_offset = sizeof(tss_entry_t);
 }
 

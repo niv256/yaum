@@ -1,5 +1,6 @@
 #include <arch/i386/isr.h>
 #include <io/screen.h>
+#include <mm/paging.h>
 #include <syscall/syscall.h>
 
 typedef struct syscall_args {
@@ -14,6 +15,10 @@ typedef int (*syscall_t)(syscall_args_t);
 
 static int very_important_syscall(syscall_args_t args);
 static void syscall(registers_t *regs);
+
+// TODO: when userspace is solid, there should be a kernel stack for every
+// process
+uint8_t syscall_stack[PAGE_SIZE];
 
 syscall_t syscall_table[SYSCALLS] = {very_important_syscall};
 
