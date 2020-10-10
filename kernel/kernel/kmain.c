@@ -5,8 +5,8 @@
 #include <io/keyboard.h>
 #include <io/screen.h>
 #include <mm/paging.h>
-#include <syscall/syscall.h>
 #include <stdio.h>
+#include <syscall/syscall.h>
 
 #if defined(__linux__) || !defined(__i686__)
 #error "Either not using a cross-compiler or not an x86 elf compiler"
@@ -31,7 +31,7 @@ int kmain(multiboot_info_t *mbt, uint32_t magic) {
   puts("gdt initialized.");
 
   tss_init();
-  terminal_writestring("tss initialized.\n");
+  puts("tss initialized.");
 
   enter_pmode();
   puts("entered protected mode.");
@@ -46,7 +46,7 @@ int kmain(multiboot_info_t *mbt, uint32_t magic) {
   puts("timer initialized.");
 
   init_syscall();
-  terminal_writestring("syscalls initialized.\n");
+  puts("syscalls initialized.");
 
   keyboard_init();
   puts("keyboard initialized.");

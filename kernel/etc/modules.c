@@ -1,6 +1,6 @@
 #include <etc/modules.h>
 #include <etc/panic.h>
-#include <io/screen.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -38,7 +38,11 @@ int print_module(const char *module_name) {
 
   uint32_t mod_start = mods[index].mod_start;
   uint32_t mod_end   = mods[index].mod_end;
-  terminal_write((char *)mod_start, mod_end - mod_start);
+  size_t len         = mod_end - mod_start;
+
+  for (size_t i = 0; i < len; i++) {
+    putchar(((char *)mod_start)[i]);
+  }
   return 0;
 }
 

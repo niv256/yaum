@@ -1,6 +1,6 @@
 #include <arch/i386/isr.h>
-#include <io/screen.h>
 #include <mm/paging.h>
+#include <stdio.h>
 #include <syscall/syscall.h>
 
 typedef struct syscall_args {
@@ -27,10 +27,7 @@ void init_syscall(void) {
 }
 
 static int very_important_syscall(syscall_args_t args) {
-  terminal_writestring("very important syscall called!\n");
-  terminal_writestring("ebx:\n");
-  terminal_writehex(args.ebx);
-  terminal_newline();
+  printf("very important syscall called!\nebx:\n0x%x\n", args.ebx);
   return 0xdeadbeef;
 }
 
@@ -41,8 +38,7 @@ static void syscall(registers_t *regs) {
   if (syscall_num < SYSCALLS && syscall_table[syscall_num]) {
     regs->eax = syscall_table[syscall_num](args);
   } else {
-    terminal_writestring("unknown syscall:\n");
-    terminal_writehex(syscall_num);
+    printf("invalid syscall number: 0x%x\n", syscall_num);
     regs->eax = -1;
   }
 }
