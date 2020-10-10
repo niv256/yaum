@@ -8,7 +8,7 @@ size_t ticks;
 size_t interval;
 bool verbose;
 
-static void watch(registers_t regs) {
+static void watch(registers_t *regs) {
   if (verbose && ticks % interval < TICK) {
     terminal_writestring("system time (in seconds): ");
     terminal_writedec(MS_TO_SECOND(ticks));

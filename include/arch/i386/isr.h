@@ -27,7 +27,7 @@ typedef struct registers {
   uint32_t eip, cs, eflags, useresp, ss;
 } registers_t;
 
-typedef void (*isr_t)(registers_t);
+typedef void (*isr_t)(registers_t *);
 
 void setup_isr_callback(int isr, isr_t callback);
 

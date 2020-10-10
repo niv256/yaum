@@ -29,3 +29,5 @@ OBJECTS+=kernel/kmain.o
 
 OBJECTS+=mm/paging.o
 OBJECTS+=mm/malloc.o
+
+OBJECTS+=syscall/syscall.o

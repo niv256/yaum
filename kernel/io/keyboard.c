@@ -151,7 +151,7 @@ void reset_buffer(void) {
   input_buffer[0] = '\0';
 }
 
-void get_key_press(registers_t regs) {
+void get_key_press(registers_t *regs) {
   char key_val, ascii_val;
   key_val = inb(0x60);
 
