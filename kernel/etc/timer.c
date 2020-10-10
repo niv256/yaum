@@ -1,6 +1,6 @@
 #include <arch/i386/isr.h>
 #include <etc/timer.h>
-#include <io/screen.h>
+#include <stdio.h>
 
 #define TICK 55
 
@@ -10,9 +10,8 @@ bool verbose;
 
 static void watch(registers_t regs) {
   if (verbose && ticks % interval < TICK) {
-    terminal_writestring("system time (in seconds): ");
-    terminal_writedec(MS_TO_SECOND(ticks));
-    terminal_newline();
+    // TODO: add floating point printing
+    printf("system time (in seconds): %d\n", (int)MS_TO_SECOND(ticks));
   }
   ticks += TICK;
 }
