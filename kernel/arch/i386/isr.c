@@ -1,7 +1,7 @@
 #include <arch/i386/isr.h>
 #include <etc/panic.h>
 #include <etc/tools.h>
-#include <io/screen.h>
+#include <stdio.h>
 
 #define NUMBER_CALLBACKS 256
 
@@ -22,9 +22,7 @@ void isr_handler(registers_t *regs) {
   if (callbacks[regs->int_num]) {
     (*callbacks[regs->int_num])(regs);
   } else {
-    terminal_writestring("got interrupt: ");
-    terminal_writehex(regs->int_num);
-    terminal_newline();
+    printf("got interrupt: 0x%x\n", regs.int_num);
   }
 }
 

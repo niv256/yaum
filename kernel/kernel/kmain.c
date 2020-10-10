@@ -6,6 +6,7 @@
 #include <io/screen.h>
 #include <mm/paging.h>
 #include <syscall/syscall.h>
+#include <stdio.h>
 
 #if defined(__linux__) || !defined(__i686__)
 #error "Either not using a cross-compiler or not an x86 elf compiler"
@@ -21,39 +22,39 @@ int kmain(multiboot_info_t *mbt, uint32_t magic) {
 
   init_modules(mbt);
   write_logo();
-  terminal_newline();
+  putchar('\n');
 
-  terminal_writestring("screen initialized.\n");
-  terminal_writestring("modules initialized.\n");
+  puts("screen initialized.");
+  puts("modules initialized.");
 
   gdt_init();
-  terminal_writestring("gdt initialized.\n");
+  puts("gdt initialized.");
 
   tss_init();
   terminal_writestring("tss initialized.\n");
 
   enter_pmode();
-  terminal_writestring("entered protected mode.\n");
+  puts("entered protected mode.");
 
   init_paging();
-  terminal_writestring("paging initialized.\n");
+  puts("paging initialized.");
 
   idt_init();
-  terminal_writestring("idt initialized.\n");
+  puts("idt initialized.");
 
   timer_init(TIMER_SILENT, SECOND_TO_MS(2));
-  terminal_writestring("timer initialized.\n");
+  puts("timer initialized.");
 
   init_syscall();
   terminal_writestring("syscalls initialized.\n");
 
   keyboard_init();
-  terminal_writestring("keyboard initialized.\n");
+  puts("keyboard initialized.");
 
-  terminal_writestring("\n\njumping to user space:\n");
+  puts("\n\njumping to user space:");
   jump_usermode((uint32_t)userspace_func);
 
-  terminal_writestring("\nshell:\n> ");
+  printf("\nshell:\n> ");
 
   for (;;)
     ;

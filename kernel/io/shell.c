@@ -1,8 +1,8 @@
 #include <etc/modules.h>
 #include <etc/shutdown.h>
 #include <etc/tools.h>
-#include <io/screen.h>
 #include <io/shell.h>
+#include <stdio.h>
 #include <string.h>
 
 void user_input(char *input) {
@@ -10,22 +10,20 @@ void user_input(char *input) {
   char trimmed[256];
   trim(trimmed, 256, input);
 
-  terminal_newline();
+  putchar('\n');
   if (strcmp(trimmed, "java")) {
-    terminal_writestring("haha c go brrrrrrrr\n");
+    puts("haha c go brrrrrrrr");
   } else if (strcmp(trimmed, "shutdown")) {
     shutdown();
   } else if (strcmp(trimmed, "reboot")) {
     reboot();
   } else if (!execute_module(trimmed, &ret)) {
-    terminal_writestring("return value: ");
-    terminal_writehex(ret);
-    terminal_newline();
+    printf("return value: 0x%x\n", ret);
   } else if (strcmp(trimmed, "")) {
-    terminal_writestring("at least say SOMETHING...\n");
+    puts("at least say SOMETHING...");
   } else {
-    terminal_writestring("stop saying nonsense, that's not even a command!\n");
+    puts("stop saying nonsense, that's not even a command!");
   }
 
-  terminal_writestring("> ");
+  printf("> ");
 }
