@@ -10,6 +10,9 @@
     "utoa",
     "haha",
     "DLAB",
-    "IRQs"
+    "IRQs",
+    "rsvd",
+    "ldtr",
+    "iopb"
   ]
 }

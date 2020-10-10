@@ -8,7 +8,7 @@ size_t ticks;
 size_t interval;
 bool verbose;
 
-static void watch(registers_t regs) {
+static void watch(registers_t *regs) {
   if (verbose && ticks % interval < TICK) {
     // TODO: add floating point printing
     printf("system time (in seconds): %d\n", (int)MS_TO_SECOND(ticks));

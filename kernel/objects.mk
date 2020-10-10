@@ -7,6 +7,9 @@ OBJECTS+=arch/i386/gdt.o
 OBJECTS+=arch/i386/idt.o
 OBJECTS+=arch/i386/isr.o
 OBJECTS+=arch/i386/pmode.o
+OBJECTS+=arch/i386/tss.o
+OBJECTS+=arch/i386/usermode.o
+OBJECTS+=arch/i386/userspace_func.o
 
 OBJECTS+=boot/boot.o
 
@@ -26,3 +29,5 @@ OBJECTS+=kernel/kmain.o
 
 OBJECTS+=mm/paging.o
 OBJECTS+=mm/malloc.o
+
+OBJECTS+=syscall/syscall.o

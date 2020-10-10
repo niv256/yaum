@@ -2,6 +2,7 @@
 #include <io/keyboard.h>
 #include <io/screen.h>
 #include <io/shell.h>
+#include <stdio.h>
 
 #define MAX_KEY_VAL 0xb6
 
@@ -151,7 +152,7 @@ void reset_buffer(void) {
   input_buffer[0] = '\0';
 }
 
-void get_key_press(registers_t regs) {
+void get_key_press(registers_t *regs) {
   char key_val, ascii_val;
   key_val = inb(0x60);
 
@@ -212,7 +213,7 @@ void get_key_press(registers_t regs) {
       input_buffer[buffer_index++] = ascii_val;
       input_buffer[buffer_index]   = '\0';
 
-      terminal_writechar(ascii_val);
+      putchar(ascii_val);
       break;
   }
 }
