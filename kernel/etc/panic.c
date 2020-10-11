@@ -25,7 +25,7 @@ static void print_info(void) {
   ebp = (uint32_t *)*ebp;
 
   while (ebp != NULL) {
-    printf("%x ", ebp[1]);
+    printf("0x%p ", ebp[1]);
 
     ebp = (uint32_t *)ebp[0];
   }
