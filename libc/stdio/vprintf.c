@@ -11,30 +11,37 @@ int vprintf(const char *format, va_list ap) {
           terminal_writedec(va_arg(ap, int));
           break;
         }
+
+        case 'p':
         case 'x': {
           terminal_writehex(va_arg(ap, uint32_t));
           break;
         }
+
         case 's': {
           terminal_writestring(va_arg(ap, char *));
           break;
         }
+
         case 'c': {
           /* since we can only push a minimum of 4 bytes on the stack, char
            * automatically gets promoted to an int */
           terminal_writechar(va_arg(ap, int));
           break;
         }
+
         case '%': {
           terminal_writechar('%');
           break;
         }
+
         case '\0': {
           // reached end of string, decrease i so the loop will stop after the
           // current iteration and don't print anything.
           i--;
           break;
         }
+
         default: {
           terminal_writechar('%');
           terminal_writechar(*i);
