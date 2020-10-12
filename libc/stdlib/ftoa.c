@@ -10,7 +10,7 @@ char *ftoa(double number, int ndigit, char *buf)
     // percision
     double percision = 0.5;
     for(int i = ndigit; i; i--)
-        percision /= 10;
+        percision /= BASE;
     number += (number > 0) ? percision : -percision;
 
     int int_part = (int)(number);
