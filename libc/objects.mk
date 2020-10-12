@@ -13,6 +13,7 @@ LIBC_OBJS+=stdio/vprintf.o
 LIBC_OBJS+=stdlib/abs.o
 LIBC_OBJS+=stdlib/itoa.o
 LIBC_OBJS+=stdlib/utoa.o
+LIBC_OBJS+=stdlib/ftoa.o
 
 LIBC_OBJS+=string/memcpy.o
 LIBC_OBJS+=string/strcmp.o
