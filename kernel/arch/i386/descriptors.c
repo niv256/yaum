@@ -308,7 +308,7 @@ struct gdt_entry {
   uint32_t direction_conforming : 1;
   uint32_t executable : 1;
   uint32_t type : 1;
-  uint32_t privilege : 2;
+  uint32_t DPL : 2;
   uint32_t present : 1;
 
   uint32_t limit_last_4 : 4;
@@ -409,7 +409,7 @@ typedef struct idt_ptr idt_ptr;
 static void set_gdt_entry(gdt_entry_t *entry, uint32_t base, uint32_t limit,
                           bool accessed, bool read_write,
                           bool direction_conforming, bool executable, bool type,
-                          uint8_t privilege, bool present, bool size,
+                          uint8_t DPL, bool present, bool size,
                           bool granularity);
 
 static void set_tss_descriptor(tss_descriptor_t *descriptor, uint32_t base,
@@ -427,7 +427,7 @@ idt_entry_t idt_entries[NUMBER_IDT_ENTRIES];
 static void set_gdt_entry(gdt_entry_t *entry, uint32_t base, uint32_t limit,
                           bool accessed, bool read_write,
                           bool direction_conforming, bool executable, bool type,
-                          uint8_t privilege, bool present, bool size,
+                          uint8_t DPL, bool present, bool size,
                           bool granularity) {
   entry->limit_first_16       = limit & 0xFFFF;
   entry->base_first_24        = base & 0xFFFFFF;
@@ -436,7 +436,7 @@ static void set_gdt_entry(gdt_entry_t *entry, uint32_t base, uint32_t limit,
   entry->direction_conforming = direction_conforming;
   entry->executable           = executable;
   entry->type                 = type;
-  entry->privilege            = privilege;
+  entry->DPL                  = DPL;
   entry->present              = present;
   entry->limit_last_4         = (limit >> (20 - 4)) & 0x0F;
   entry->always_0             = 0;
