@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-int get_decimal_places(float number);
+uint8_t get_decimal_places(float number);
 
-char *ftoa(float number, int ndigit, char *buf) {
-  ndigit = fmin((uint32_t)ndigit, get_decimal_places(number));
+char *ftoa(float number, uint8_t ndigit, char *buf) {
+  ndigit = fmin(ndigit, get_decimal_places(number));
 
   if (number < 0) {
     *buf++ = '-';
@@ -29,8 +29,8 @@ char *ftoa(float number, int ndigit, char *buf) {
   return buf;
 }
 
-int get_decimal_places(float number) {
-  int count = 0;
+uint8_t get_decimal_places(float number) {
+  uint8_t count = 0;
 
   while ((number = number * 10 - (int)number * 10)) {
     count++;
