@@ -13,16 +13,18 @@ char *ftoa(float number, int ndigit, char *buf) {
     number = fabs(number);
   }
 
-  uint32_t int_part = (uint32_t)(number);
-  itoa(int_part, buf, 10);
+  utoa((uint32_t)(number), buf, 10);
+  buf += strlen(buf);
 
-  number -= int_part;
+  // keep only the digits after the decimal point
+  number -= (uint32_t)number;
 
-  int_part = (uint32_t)(number * pow(10, ndigit));
+  // number's fraction part as an integer
+  uint32_t fraction = (uint32_t)(number * pow(10, ndigit));
+
   if (ndigit) {
-    buf += strlen(buf);
     *buf++ = '.';
-    utoa(int_part, buf, 10);
+    utoa(fraction, buf, 10);
   }
 
   return buf;
