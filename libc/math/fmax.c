@@ -1,6 +1,5 @@
 #include <math.h>
 
-int fmax(double x, double y)
-{
+float fmax(float x, float y) {
   return (x > y) ? x : y;
 }
