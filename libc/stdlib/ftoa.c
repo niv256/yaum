@@ -1,34 +1,32 @@
-#include <string.h>
-#include <stdlib.h>
 #include <math.h>
-#define BASE 10
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
-char *ftoa(double number, int ndigit, char *buf)
-{
-  if(ndigit < 0) // no support for negative digits after the decimal point
-    ndigit = 0;
+#define BASE          10
+#define MAX_PERCISION 10
 
-  // percision
-  double percision = 0.5;
-  for(int i = ndigit; i; i--)
-    percision /= 10;
-  number += (number > 0) ? percision : -percision;
+char *ftoa(double number, int ndigit, char *buf) {
+  // no support for negative digits after the decimal point
+  ndigit = fmax(0, ndigit);
 
-  int int_part = (int)(number);
+  uint32_t int_part = (int)(number);
   itoa(int_part, buf, BASE); // getting integer part using itoa
-    
+
   // getting the decimal part's digits as an integer, in order to use atoi again
   number -= int_part;
-  for(; ndigit; ndigit--) // we nedd only $ndigits digits of the decimal part
-    number *= BASE;
-  int_part = abs((int) number); // the decimal part is non-negative
+  number = fabs(number); // and we continue with the absolute value
 
-  if(!int_part) // if the decimal part is 0, we are done with converting the number
-    return buf;
+  // we need only $ndigits digits of the decimal part
+  int_part = (uint32_t)(number * pow(BASE, fmin(ndigit, MAX_PERCISION)));
+  if (ndigit) { // if the decimal part is 0, we are done with converting the
+                // number
+    char *fraction = buf + strlen(buf);
+    *fraction++    = '.'; // decimal point divides both parts
 
-  char *fraction = buf + strlen(buf);
-  *fraction++ = '.'; // decimal point divides both parts
+    utoa(int_part, fraction,
+         BASE); // converting the decimal digits into a string
+  }
 
-  itoa(int_part, fraction, BASE); // converting the decimal digits into a string
   return buf;
 }
