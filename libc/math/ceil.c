@@ -5,5 +5,5 @@ float ceil(float x) {
   if (n == x) {
     return x;
   }
-  return (double)n + 1;
+  return (float)n + 1;
 }
