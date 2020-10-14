@@ -1,6 +1,6 @@
 #include <math.h>
 
-double ceil(double x) {
+float ceil(float x) {
   int n = (int)x;
   if (n == x) {
     return x;

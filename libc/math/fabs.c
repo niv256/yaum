@@ -1,6 +1,6 @@
 #include <math.h>
 
-double fabs(double x) {
+float fabs(float x) {
   if (x >= 0) {
     return x;
   }
