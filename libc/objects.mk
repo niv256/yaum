@@ -6,6 +6,7 @@ LIBC_OBJS+=math/ceil.o
 LIBC_OBJS+=math/fabs.o
 LIBC_OBJS+=math/fmax.o
 LIBC_OBJS+=math/fmin.o
+LIBC_OBJS+=math/pow.o
 
 LIBC_OBJS+=stdio/printf.o
 LIBC_OBJS+=stdio/putchar.o
